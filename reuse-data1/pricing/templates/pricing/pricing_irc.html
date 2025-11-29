@@ -1,0 +1,99 @@
+{% extends 'pricing/pricing_trmc.html' %}
+
+{% block title %}IRC - Pricing Portal (BETA) - data1{% endblock %}
+
+
+{% block header_title %} ***** IRC ***** Pricing Portal (BETA){% endblock %}
+
+
+{% block active_link %}
+
+{% endblock %}
+
+
+{% block TAGS_TEMP %}
+<div class="card-body">
+  <div class="tab">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item"><a class="nav-link active" href="#current-tab" data-toggle="tab" role="tab" aria-selected="true">{{CColor}}</a></li>
+      <li class="nav-item"><a class="nav-link" href="#white-tab" data-toggle="tab" role="tab" aria-selected="false">White</a></li>
+      <li class="nav-item"><a class="nav-link" href="#unit-tab" data-toggle="tab" role="tab" aria-selected="false">Unit Priced(White)</a></li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="current-tab" role="tabpanel">
+        <p>{{CColor}} Tagged Items with standard prices...</p>
+        <button id="{{CC}}IBKS" type="button" class="btn {{CColor}}-tag btn-lg">Books</button>
+        <button id="{{CC}}IBMM" type="button" class="btn {{CColor}}-tag btn-lg">Building Materials</button>
+        <button id="{{CC}}ILIT" type="button" class="btn {{CColor}}-tag btn-lg">Lighting</button>
+        <button id="{{CC}}ITLS" type="button" class="btn {{CColor}}-tag btn-lg">Tools</button>
+        <button id="{{CC}}IELC" type="button" class="btn {{CColor}}-tag btn-lg">Electronics</button>
+        <button id="{{CC}}IFUR" type="button" class="btn {{CColor}}-tag btn-lg">Furniture</button>
+        <button id="{{CC}}IAPL" type="button" class="btn {{CColor}}-tag btn-lg">Appliances</button>
+        <button id="{{CC}}IHOW" type="button" class="btn {{CColor}}-tag btn-lg">Housewares</button>
+        <button id="{{CC}}IJWL" type="button" class="btn {{CColor}}-tag btn-lg">Jewelry</button>
+        <button id="{{CC}}ISEA" type="button" class="btn {{CColor}}-tag btn-lg">Seasonal</button>
+
+<!--        <button id="{{CC}}IACS" type="button" class="btn {{CColor}}-tag btn-lg">Accessories</button> -->
+
+        <button id="{{CC}}ICLO" type="button" class="btn {{CColor}}-tag btn-lg">Clothing</button>
+        <button id="{{CC}}GLIN" type="button" class="btn {{CColor}}-tag btn-lg">Linens</button>
+        <button id="{{CC}}ISHO" type="button" class="btn {{CColor}}-tag btn-lg">Shoes</button>
+        <button id="{{CC}}IHOL" type="button" class="btn {{CColor}}-tag btn-lg">Holiday</button>
+        <button id="{{CC}}IBCY" type="button" class="btn {{CColor}}-tag btn-lg">Bicycle</button>
+        <button id="{{CC}}IBPT" type="button" class="btn {{CColor}}-tag btn-lg">Bicycle Parts</button>
+      </div>
+      <div class="tab-pane" id="white-tab" role="tabpanel">
+        <p>White tagged items with standard prices. Use these for items that will not automatically go through the automatic discount system.</p>
+        <button id="WIBKS" type="button" class="btn White-tag btn-lg">Books</button>
+        <button id="WIMOV" type="button" class="btn White-tag btn-lg">Movies</button>
+        <button id="WIMUS" type="button" class="btn White-tag btn-lg">Music</button>
+        <button id="WIBMM" type="button" class="btn White-tag btn-lg">Building Materials</button>
+        <button id="WILIT" type="button" class="btn White-tag btn-lg">Lighting</button>
+        <button id="WITLS" type="button" class="btn White-tag btn-lg">Tools</button>
+        <button id="WIELC" type="button" class="btn White-tag btn-lg">Electronics</button>
+        <button id="WIFUR" type="button" class="btn White-tag btn-lg">Furniture</button>
+        <button id="WIAPL" type="button" class="btn White-tag btn-lg">Appliances</button>
+        <button id="WIHOW" type="button" class="btn White-tag btn-lg">Housewares</button>
+        <button id="WIJWL" type="button" class="btn White-tag btn-lg">Jewelry</button>
+        <button id="WISEA" type="button" class="btn White-tag btn-lg">Seasonal</button>
+        <button id="WIACS" type="button" class="btn White-tag btn-lg">Accessories</button>
+        <button id="WICLO" type="button" class="btn White-tag btn-lg">Clothing</button>
+        <button id="WILIN" type="button" class="btn White-tag btn-lg">Linens</button>
+        <button id="WISHO" type="button" class="btn White-tag btn-lg">Shoes</button>
+        <button id="WIDWS" type="button" class="btn White-tag btn-lg">Doors/Windows</button>
+        <button id="WILUM" type="button" class="btn White-tag btn-lg">Lumber</button>
+        <button id="WIHOL" type="button" class="btn White-tag btn-lg">Holiday</button>
+        <button id="WIPER" type="button" class="btn White-tag btn-lg">Peripherals</button>
+        <button id="WIBCY" type="button" class="btn White-tag btn-lg">Bicycle</button>
+        <button id="WIBPT" type="button" class="btn White-tag btn-lg">Bicycle Parts</button>
+      </div>
+      <div class="tab-pane" id="unit-tab" role="tabpanel">
+        <p>Unit priced tags: Please print these on white tags.</p>
+        <button id="UIBKS" class="btn Unit-tag btn-lg">Books</button>
+        <button id="UIMOV" class="btn Unit-tag btn-lg">Movies</button>
+        <button id="UIMUS" class="btn Unit-tag btn-lg">Music</button>
+        <button id="UIBMM" class="btn Unit-tag btn-lg">Building Materials</button>
+        <button id="UILIT" class="btn Unit-tag btn-lg">Lighting</button>
+        <button id="UITLS" class="btn Unit-tag btn-lg">Tools</button>
+        <button id="UIELC" class="btn Unit-tag btn-lg">Electronics</button>
+        <button id="UIAPL" class="btn Unit-tag btn-lg">Appliances</button>
+        <button id="UIHOW" class="btn Unit-tag btn-lg">Housewares</button>
+        <button id="UIJWL" class="btn Unit-tag btn-lg">Jewelry</button>
+        <button id="UISEA" class="btn Unit-tag btn-lg">Seasonal</button>
+        <button id="UIACS" class="btn Unit-tag btn-lg">Accessories</button>
+        <button id="UICLO" class="btn Unit-tag btn-lg">Clothing</button>
+        <button id="UILIN" class="btn Unit-tag btn-lg">Linens</button>
+        <button id="UISHO" class="btn Unit-tag btn-lg">Shoes</button>
+        <button id="UIDWS" class="btn Unit-tag btn-lg">Doors/Windows</button>
+        <button id="UILUM" class="btn Unit-tag btn-lg">Lumber</button>
+        <button id="UIHOL" class="btn Unit-tag btn-lg">Holiday</button>
+        <button id="UIPER" class="btn Unit-tag btn-lg">Peripherals</button>
+        <button id="UIDES" class="btn Unit-tag btn-lg">Desktop</button>
+        <button id="UILAP" class="btn Unit-tag btn-lg">Laptop</button>
+        <button id="UITAB" class="btn Unit-tag btn-lg">Smartphone</button>
+        <button id="UIOCP" class="btn Unit-tag btn-lg">Other Computer</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

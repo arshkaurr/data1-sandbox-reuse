@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Capacity Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"> </script>
+  </head>
+  <body>
+    <h1>{{location}} Capacity Stats</h1>
+    <h3>Capacity Averages by Hour/Weekday (Percentages %)</h3>
+    <div id="chart1" height="600px" width="600px"></div>
+    <h3>Capacity Averages by Hour/Weekday (table data)</h3>
+    {{table2 | safe}}
+    <br>
+    <br>
+    <h3>Capacity Averages by individual day</h3>
+    {{table1 | safe}}
+    <br>
+    <br>
+    <br>
+    <br>
+
+
+
+
+
+
+
+    <script type="text/javascript">
+        var options = {
+      chart: {
+        'type': 'heatmap',
+        'height': 500,
+        'width' : 1080
+      },
+      // series: [{name: 'sales', data: [0,1,2,3,4,5,6,7,8,9]},{name: 'sales2', data: [-1,2,3,2,1,3,4,1,2,2]} ],
+      series: {{series_list | safe}},
+      xaxis: {
+        categories: {{hours | safe}}
+      },
+      'colors':['#347532']
+    }
+
+    var chart1 = new ApexCharts(document.querySelector("#chart1"), options);
+
+    chart1.render();
+    </script>
+
+  </body>
+</html>

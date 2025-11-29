@@ -1,0 +1,87 @@
+{% extends 'qbgiftcard/default1.html' %}
+
+{% block title %}Quickbooks Gift Cards - LOOKUP{% endblock %}
+
+
+
+
+{% block header_title %}Quickbooks Gift Cards - LOOKUP{% endblock %}
+
+
+
+
+
+
+
+{% block content %}
+
+
+<div class="row">
+  <div class="col-12 col-sm-4">
+    <div class="card" id="print_card">
+      <div class="card-header">
+        <h5 class="card-title"></h5>
+        <h6 class="pt-3 card-subtitle text-muted">Please scan this code in at checkout <br>(Select 'Gift card' as payment type)</h6>
+      </div>
+
+      <div class="card-body align-center" id="print_target">
+        <h3>{{gift_card_name}}</h3>
+        <div  id="datamatrix_target"></div>
+        <p>{{access_log.0.DATE_TIME}}</p>
+        <button id="print_button" class="btn btn-success">Print</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-8">
+    <div class="card">
+      <div class="card-header"><h3 class="card-title">ACCESS LOG FOR THIS GIFTCARD</h3></div>
+      <div class="card-body align-center">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date / Time</th>
+              <th class="d-none d-md-table-cell" >Staff ID</th>
+            </tr>
+          </thead>
+          <tbody id='giftcard_access_log'>
+            {% for i in access_log %}
+            <tr><td>{{i.DATE_TIME}}</td><td>{{i.staff_id}}@fingerlakesreuse.org</td></tr>
+
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div
+
+{% endblock %}
+
+
+
+
+{% block javascript_end %}
+{% load static %}
+<script type="text/javascript" src="{% static 'qbgiftcard/datamatrix.min.js' %}"></script>
+
+
+<script type="text/javascript">
+  // let customer_dict = {{customer_dict | safe}}
+$('#datamatrix_target').append(DATAMatrix({'dim':150,'msg':'shopify-giftcard-v1-' + '{{gift_card_code}}' }))
+
+$('#print_button').on('click', function(){
+  $('#print_button').remove()
+  $('body').html($('#print_target').html())
+  $('#print_card').css('background','white')
+  print()
+})
+
+</script>
+
+
+
+
+
+{% endblock %}

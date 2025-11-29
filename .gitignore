@@ -1,0 +1,103 @@
+# Root .gitignore for the project
+# Generated: keeps SQL files tracked (remove the ! rule if you want to ignore .sql files)
+
+# ------------------
+# macOS
+# ------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ------------------
+# Python
+# ------------------
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+eggs/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+pip-wheel-metadata/
+wheel/
+.pytest_cache/
+
+# Virtual envs
+venv/
+ENV/
+env/
+.venv/
+venv.bak/
+env.bak/
+
+# ------------------
+# Django & project
+# ------------------
+# local database files
+db.sqlite3
+*.sqlite3
+
+# local settings that may contain secrets
+local_settings.py
+reuse-data1/local_settings.py
+
+# Django runtime/static/media
+media/
+staticfiles/
+
+# ------------------
+# Editors / IDEs
+# ------------------
+.vscode/
+.idea/
+
+# ------------------
+# Logs and temp files
+# ------------------
+*.log
+*.pot
+*.pyc
+celerybeat-schedule
+*.pid
+
+# ------------------
+# Secrets and env
+# ------------------
+.env
+.env.*
+
+# ------------------
+# OS misc
+# ------------------
+Thumbs.db
+
+# ------------------
+# Node
+# ------------------
+node_modules/
+
+# ------------------
+# Build artifacts
+# ------------------
+*.so
+*.dylib
+*.o
+
+# ------------------
+# SQL files
+# ------------------
+# We want to keep .sql files tracked in the repo by default: if you'd prefer to IGNORE
+# SQL dump files, replace the following line with `*.sql` (or add specific names).
+*.sql
+
+# If you have auto-generated SQL export archives you want to ignore, add patterns like:
+# *.sql.gz
+# *.sql.bz2

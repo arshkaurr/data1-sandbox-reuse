@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="noindex">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title>RCH Pricing Portal (Beta)</title>
+  </head>
+  <body>
+    <div class="nav bg-dark"><div class="container pb-3 pt-5 shadow-sm"><h3 class="row text-light">RCH Pricing Portal (Beta) </h3></div></div>
+    <div class="container mt-5 mb-3">
+      <div class="row float-right"><p>Submitting as: <strong>{{ user.email }}</strong><a href="{% url 'HOME' %}"> (Change)</a></p></div>
+      <div class="row pt-3"><h4>Select your Tag: </h4></div>
+
+      <div class="row mt-3">
+        <button id="99900000" class="btn border btn-lg btn-light mx-1 my-1 rounded-pill">LOOSE</button>
+        <button id="99600000" class="btn border btn-lg btn-light mx-1 my-1 rounded-pill">MISC-E</button>
+        <button id="99700000" class="btn border btn-lg btn-light mx-1 my-1 rounded-pill">MISC-P</button>
+        <button id="99800000" class="btn border btn-lg btn-light mx-1 my-1 rounded-pill">MISC-P ($100+)</button>
+      </div>
+      <div class="row mt-3">
+        <button id="99400000" class="btn border btn-lg btn-success mx-1 my-1 rounded-pill">Building Materials (FLR)</button>
+        <button id="99000000" class="btn border btn-lg btn-success mx-1 my-1 rounded-pill">Electronics (FLR)</button>
+        <button id="98900000" class="btn border btn-lg btn-success mx-1 my-1 rounded-pill">FURNITURE (FLR)</button>
+        <button id="99500000" class="btn btn-lg btn-success mx-1 my-1 rounded-pill">BOOKS (FLR)</button>
+        <button id="99300000" class="btn btn-lg btn-success mx-1 my-1 rounded-pill">MOVIES (FLR)</button>
+        <button id="99200000" class="btn btn-lg btn-success mx-1 my-1 rounded-pill">HOME GOODS (FLR)</button>
+        <button id="99100000" class="btn btn-lg btn-success mx-1 my-1 rounded-pill">MUSIC (FLR)</button>
+      </div>
+      <div class="row mt-3">
+        <button id="98800000" class="btn btn-lg btn-primary mx-1 my-1 rounded-pill">DECON ITEM</button>
+        <button id="98600000" class="btn btn-lg btn-warning mx-1 my-1 rounded-pill">QUILTS</button>
+      </div>
+
+
+      <div class="row mt-3" id="targetButtons">
+        <!-- THIS IS WHERE THE AUTO GENERATED BUTTONS WILL APPEAR
+
+        NOT BEING USED RIGHT NOW - HARDCODED ABOVE
+
+       -->
+
+      </div>
+
+      <div class="row mt-3">
+        <!-- <p id="targetTitle">THIS IS SOME TEXT</p> -->
+      </div>
+
+      <div class="row mt-5"><!-- THE THREE OPTION ROW -->
+        <div class="col form-group"><p>Price Point/Variant:</p><select class="form-control" id="targetBarcode"><option value="one">1</option><option value="two">2</option></select></div>
+        <div class="col form-group"><p>Select Quantity:</p>
+          <select name="quantity" id="targetQuantity" class="form-control">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="15">15 - (BULK)</option>
+            <option value="20">20 - (BULK)</option>
+            <option value="25">25 - (BULK)</option>
+            <option value="30">30 - (BULK)</option>
+            <option value="35">35 - (BULK)</option>
+            <option value="40">40 - (BULK)</option>
+            <option value="45">45 - (BULK)</option>
+            <option value="50">50 - (BULK)</option>
+            <option value="60">60 - (BULK)</option>
+            <option value="70">70 - (BULK)</option>
+            <option value="80">80 - (BULK)</option>
+            <option value="100">100- (BULK)</option>
+          </select>
+        </div>
+        <div class="col form-group">
+          <div class="form-check row">
+            <div class='col'>
+              <input class="form-check-input" type="checkbox" value="" id="targetAddtoInventory" checked >
+              <label class="form-check-label" for="targetAddtoInventory">Add to Inventory</label>
+            </div>
+            <div class="col">
+              <input class="form-check-input" type="checkbox" value="" id="targetPrintTags" checked >
+              <label class="form-check-label" for="targetPrintTags">Print Tag(s)</label>
+            </div>
+          </div><p></p>
+          <button type="button" onClick="toggleInventory()" class="btn border btn-secondary form-control" id="targetPrint">PRINT + ADD TO INVENTORY</button></div>
+      </div>
+      <div class="row mt-5"><!-- THE THREE OPTION ROW -->
+
+        <h3 id="targetMessage"></h3>
+      </div>
+
+
+      <div class="row mt-5"><!-- The TABLE SECTION -->
+        <div align="center" class="container" id="targetTable"></div>
+      </div>
+
+
+
+
+    </div>
+
+
+    <!-- END BODY -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src= "https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+
+
+
+    <script type="text/javascript">
+
+
+    var JSONOBJECT = {{JSONOBJECT | safe}}
+    // JSONOBJECT = JSON.parse(JSONOBJECT)
+
+
+    const buttonLookup = {"green":"btn-success", "white": "btn-light", "blue":"btn-primary"}
+
+// HARDCODED TAG-COLOR OVERIDE
+    JSONOBJECT['99900000']['tag-color'] = 'white' // LOOSE
+    JSONOBJECT['99800000']['tag-color'] = 'white' // Misc-P  $100+
+    JSONOBJECT['99700000']['tag-color'] = 'white' // Misc-P <100
+    JSONOBJECT['99600000']['tag-color'] = 'white' // Misc-P  $100+
+
+    JSONOBJECT['99500000']['tag-color'] = 'green' // Books - was Media (chris pre duplicate)!
+    JSONOBJECT['99300000']['tag-color'] = 'green' // Chris  MOVIES gorilla 993XXXXX
+    JSONOBJECT['98900000']['tag-color'] = 'green' // Furniture - NO change
+    JSONOBJECT['99200000']['tag-color'] = 'green' // HOME GOODS
+    JSONOBJECT['99100000']['tag-color'] = 'green' // MUSIC
+    JSONOBJECT['99000000']['tag-color'] = 'green' // ELECTRONICS
+    JSONOBJECT['99400000']['tag-color'] = 'green' // BUILDING MATERIALS
+
+
+    JSONOBJECT['98800000']['tag-color'] = 'blue'  //    Cortland Decon
+    JSONOBJECT['98600000']['tag-color'] = 'yellow'  //    Quilts Sale
+
+
+    var targetOBJECT = {
+      "barcode" : "satan",
+      "quantity" : "",
+      "update" : "1",
+      "print" : "1",
+    }
+
+
+    function renderButton(){
+
+      // This resets the Message
+      $("#targetMessage").html("")
+
+      if($("#targetPrintTags").prop("checked") == false &&  $("#targetAddtoInventory").prop("checked") == false  ){
+        $("#targetPrint").prop("disabled","true")
+      }
+      else{
+        $("#targetPrint").removeAttr("disabled")
+
+        if(  $("#targetPrintTags").prop("checked") == true &&  $("#targetAddtoInventory").prop("checked") == false  ){
+          $("#targetPrint").html("PRINT ONLY")
+        }
+        if(  $("#targetPrintTags").prop("checked") == false &&  $("#targetAddtoInventory").prop("checked") == true  ){
+          $("#targetPrint").html("ADD TO INVENTORY")
+
+
+        }
+        if(  $("#targetPrintTags").prop("checked") == true &&  $("#targetAddtoInventory").prop("checked") == true  ){
+          $("#targetPrint").html("PRINT + ADD TO INVENTORY")
+
+
+
+        }
+
+      }
+
+    }
+
+
+
+    function renderTable(){
+      $('#targetTable').html('google')
+      xhr1 = new XMLHttpRequest();
+      xhr1.open('get', '/shopify/rchpricing_usertest/')
+      xhr1.send()
+
+      xhr1.onreadystatechange = function(){
+        if (xhr1.readyState === 4){
+          $('#targetTable').html(xhr1.response)
+        }
+      }
+    }
+
+
+
+
+    // TOGGLE LISTER FOR PRINT TAGS CHECKBOX
+    function togglePrint(){
+
+      if($("#targetPrintTags").prop("checked") == true){
+          targetOBJECT['print'] = "1"
+      }
+      else if($("#targetPrintTags").prop("checked") == false){
+          targetOBJECT['print'] = "0"
+      }
+      renderButton()
+    }
+
+    // TOGGLE LISTER FOR INVENTORY CHECKBOX
+    function toggleInventory(){
+      if($("#targetAddtoInventory").prop("checked") == true){
+          targetOBJECT['update'] = "1"
+      }
+      else if($("#targetAddtoInventory").prop("checked") == false){
+          targetOBJECT['update'] = "0"
+      }
+      renderButton()
+    }
+
+    //TOGGLE FUNCTION FOR QUANTITY CHANGE
+    function toggleQuantity(){
+      renderButton()
+      targetOBJECT['quantity'] = $("#targetQuantity").prop("value")
+    }
+
+    //TOGGLE FUNCTION FOR BARCODE CHANGE CHANGE
+    function toggleBarcode(){
+      renderButton()
+      targetOBJECT['barcode'] = $("#targetBarcode").prop("value")
+    }
+
+    function toggleButton(){
+      renderButton()
+      $(".rounded-pill").each(function(index){$(this).removeClass("shadow")})
+      $(this).addClass("shadow")
+      // $(this).css("padding-top","100px")
+      var handle = $(this).prop("id")
+      var barcodes_dict = JSONOBJECT[handle]['barcodes']
+      $("#targetMessage").html( "> > " + $(this).html()  )
+      $("#targetBarcode").html("")
+      for(i=0;i<Object.keys(barcodes_dict).length;i++){
+        $("#targetBarcode").append("<option value='" + Object.keys(barcodes_dict)[i] + "' >"+ barcodes_dict[Object.keys(barcodes_dict)[i]] +"</option>")
+
+      }
+
+    }
+
+
+    function printFunction(){
+
+      var the_dict = {
+        'barcode':   $("#targetBarcode").prop("value"),
+        'quantity':  $("#targetQuantity").prop("value"),
+        'update':    targetOBJECT['update']
+      }
+
+      print_url = "/shopify/rchbarcodesubmissiontest?" + jQuery.param(the_dict)
+
+
+      // Check if we can print OR NOT!
+      if(targetOBJECT['print'] != "0"){
+        printJS(print_url)
+
+        if(targetOBJECT['update'] == "1"){
+          $("#targetMessage").html("SUCCESS: Submission & Print Complete!")
+        }
+        else{
+          $("#targetMessage").html("SUCCESS: Print Complete!")
+        }
+      }
+
+      // "MAN GOTTA SUBMIT ONLY BUT NOT PRINT")
+      if(targetOBJECT['print']=="0" && targetOBJECT['update']=="1"  ){
+        $("#targetMessage").html("submitting inventory . . .")
+
+        xhr = new XMLHttpRequest();
+        xhr.open('get', print_url)
+        xhr.send()
+
+        $("#targetMessage").html("")
+
+        xhr.onreadystatechange = function(){
+          if (xhr.readyState === 4){
+            $("#targetMessage").html("Submission Complete - (without Printing)")
+            renderTable()
+          }
+        }
+
+
+        // $("#targetMessage").html("Submission Complete - (without Printing)")
+
+
+      }
+
+      // Diable the button after completion
+      $("#targetPrint").prop("disabled","true")
+      renderTable()    }
+
+
+
+
+
+    // DOCUMENT IS READY, NOW PLACE LISTENERS
+    $(document).ready(function(){
+
+        $("#targetAddtoInventory").on("click",toggleInventory)
+        $("#targetPrintTags").on("click",togglePrint)
+
+        $("#targetQuantity").change(toggleQuantity)
+
+        $("#targetBarcode").change(toggleBarcode)
+
+        // RENDER BUTTONS
+        // for(i=0;i<Object.keys(JSONOBJECT).length;i++){
+        //   the_color = buttonLookup['']
+        //   $("#targetButtons").append("<button class='btn border btn-lg btn-success mx-1 my-1 rounded-pill'>" + JSONOBJECT[Object.keys(JSONOBJECT)[i]]['title'] + "</button>")
+        //   console.log(   buttonLookup[Object.keys(JSONOBJECT)[i]]    )
+        //   console.log( buttonLookup[Object.keys(JSONOBJECT)[i]['title']] )
+        // }
+        // $(".rounded-pill").on("mouseout",function(){console.log($(this).prop('id'))})
+
+        $(".rounded-pill").on("click",toggleButton)
+
+        $("#targetPrint").on("click",printFunction)
+
+        // Renders the table by Default!!!!!!!!!
+        renderTable()
+
+        $("#98900000").click() //HARDCODED !!!!
+        // $("#targetPrintTags").click()
+
+    })
+
+
+
+
+    </script>
+  </body>
+</html>

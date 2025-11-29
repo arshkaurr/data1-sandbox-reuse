@@ -1,0 +1,250 @@
+{% extends 'pricing/spark_base.html' %}
+
+{% block title %}Material Movement Form - v2 (2021){% endblock %}
+
+
+{% block header_title %}Material Movement Form - v2 (2021){% endblock %}
+
+{% block header_subtitle %}{{ header_subtitle }}{% endblock %}
+
+{% block active_link %}
+{% endblock %}
+{% load tz %}
+
+
+
+{% block content %}
+<div class="row">
+  <div class="col-md-6 col-sm-12">
+    <div class="card pt-3">
+      <div class="card-body">
+      <h3>Origin (FROM):</h3>
+      <div class="row">
+        <div class="col form-group mt-3">
+            <button id="origin_donations" type="button" class="target_origin_type btn btn-lg btn-dark ">Donations</button>
+            <button id="origin_overflow" type="button" class="target_origin_type btn btn-lg btn-outline-dark ">Overflow</button>
+            <button id="origin_processing" type="button" class="target_origin_type btn btn-lg btn-outline-dark ">Processing</button>
+            <!-- <button id="salesfloor" type="button" class="btn btn-lg btn-outline-dark target_origin_type">Sales Floor</button> -->
+        </div>
+       </div>
+      <div class="row">
+        <div class="col form-group mt-3">
+          <h4>Location:</h4>
+          <button id="origin_irc" type="button" class="target_origin_location btn btn-lg btn-dark">IRC</button>
+          <button id="origin_trmc" type="button" class="target_origin_location btn btn-lg btn-outline-dark">TRMC</button>
+          <button id="origin_700" type="button" class="target_origin_location btn btn-lg btn-outline-dark">DOT</button>
+        </div>
+      </div>
+
+
+			</div>
+		</div>
+  </div>
+  <div class="col-md-6 col-sm-12">
+    <div class="card pt-3">
+      <div class="card-body">
+      <h3>Destination (TO):</h3>
+      <div class="row">
+        <div class="col form-group mt-3">
+            <!-- <button id="" type="button" class="btn btn-lg btn-outline-dark" disabled="True">Donations</button> -->
+            <button id="destination_overflow" type="button" class="target_destination_type btn btn-lg btn-dark">Overflow</button>
+            <button id="destination_processing" type="button" class="target_destination_type btn btn-lg btn-outline-dark">Processing</button>
+            <button id="destination_salesfloor" type="button" class="target_destination_type btn btn-lg btn-outline-dark">Sales Floor</button>
+        </div>
+       </div>
+      <div class="row">
+        <div class="col form-group mt-3">
+          <h4>Location:</h4>
+          <button id="destination_irc" type="button" class="target_destination_location btn btn-lg btn-dark">IRC</button>
+          <button id="destination_trmc" type="button" class="target_destination_location btn btn-lg btn-outline-dark">TRMC</button>
+          <button id="destination_700" type="button" class="target_destination_location btn btn-lg btn-outline-dark">DOT</button>
+        </div>
+      </div>
+
+
+			</div>
+		</div>
+  </div>
+
+</div>
+<div class="row">
+  <div class="col"></div>
+  <div class="col-md-12 col-lg-10">
+    <div class="card pt-3">
+      <div class="card-body">
+      <div id="target_container">
+        <div class="row target_pallet_row pt-1">
+           <div class="col"><select class="form-control target_row_material" ><option>BOOKS</option><option>MDIA</option></select></div>
+           <div class="col"><input type="number" min="0.25" step="0.25" class="form-control target_row_quantity" max="10" value="0.25"></div>
+           <div class="col form-group">
+             <button type="button" class="btn btn-success target_row_del">DEL</button>
+             <button type="button" class="ml-2 btn btn-outline-success target_row_add">+ Add Row</button></div>
+        </div>
+      </div>
+      <div class="row">
+        <form id="target_form" action="{% url 'mm:movement_submit' %}"  method="POST">
+        {% csrf_token %}
+        <input type="hidden" id="origin_type" name="origin_type" value="">
+        <input type="hidden" id="origin_location" name="origin_location" value="">
+        <input type="hidden" id="destination_type" name="destination_type" value="">
+        <input type="hidden" id="destination_location" name="destination_location" value="">
+        <input type="hidden" id="pallets" name="pallets" value="">
+        <div class="col pt-3"><button id="target_submit" type="button" class="btn btn-lg btn-primary btn-block">Submit</button></div>
+        </form>
+      </div>
+      </div>
+    </div>
+  </div>
+  <div class="col"></div>
+</div>
+
+
+<div class="row mt-3">
+  <div class="col-12">
+    <div class="card pt-2 mb-2">
+      <div class="card-header">
+				<h5 class="card-title">Material Movement Submission History (Last 7 days) for <strong>{{request.user.email}}</strong></h5>
+				<!-- <h6 class="card-subtitle text-muted">This section is still being developed and will be more descriptive in a few days!</h6> -->
+			</div>
+      <div class="card-body">
+        <div id="targetTable">
+          <table id="mainTable" class="table table-sm"><thead><tr><th>Record ID</th><th>Date/Time</th><th>Origin Type</th><th>Origin Location</th><th>Destination Type</th><th>Destination Location</th><th>PRODUCT TYPE</th><th>Pallets</th></tr></thead>
+            <tbody>
+              {% for i in RECORDS %}
+                <tr>
+                  <td>{{i.id}}</td>
+                  <td>{% timezone "US/Eastern" %}{{i.movement__timestamp}}{% endtimezone %}</td>
+                  <td>{{i.movement__origin_type}}</td>
+                  <td>{{i.movement__origin_location}}</td>
+                  <td>{{i.movement__destination_type}}</td>
+                  <td>{{i.movement__destination_location}}</td>
+                  <td>{{i.product_type__product_type}}</td>
+                  <td>{{i.quantity}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+
+
+{% block javascript_end %}
+<script type="text/javascript">
+
+// RENDER THE LIST OF PRODUCT TYPES WITH THEIR IDS
+product_type_list = {{product_type_list | safe}}
+$('.target_row_material').html('')
+for(i=0;i<product_type_list.length;i++){
+  $('.target_row_material').append('<option value="' + product_type_list[i][1] +'">' + product_type_list[i][0] + '</option>')
+}
+
+function function_origin_type(){
+  $('.target_origin_type').removeClass('btn-outline-dark')
+  $('.target_origin_type').removeClass('btn-dark')
+  $('.target_origin_type').addClass('btn-outline-dark')
+  $(this).addClass('btn-dark')
+}
+function function_origin_location(){
+  $('.target_origin_location').removeClass('btn-outline-dark')
+  $('.target_origin_location').removeClass('btn-dark')
+  $('.target_origin_location').addClass('btn-outline-dark')
+  $(this).addClass('btn-dark')
+}
+
+function function_destination_type(){
+  $('.target_destination_type').removeClass('btn-outline-dark')
+  $('.target_destination_type').removeClass('btn-dark')
+  $('.target_destination_type').addClass('btn-outline-dark')
+  $(this).addClass('btn-dark')
+}
+function function_destination_location(){
+  $('.target_destination_location').removeClass('btn-outline-dark')
+  $('.target_destination_location').removeClass('btn-dark')
+  $('.target_destination_location').addClass('btn-outline-dark')
+  $(this).addClass('btn-dark')
+}
+
+
+// Listners
+$('.target_origin_type').on('click', function_origin_type)
+$('.target_origin_location').on('click', function_origin_location)
+$('.target_destination_type').on('click', function_destination_type)
+$('.target_destination_location').on('click', function_destination_location)
+
+// Initialize one material row @ Page Start
+material_row = $('#target_container').html()
+$('.target_row_add').on('click', AddRow)
+$('.target_row_del').on('click', DelRow)
+TrimButtons()
+
+function TrimButtons(){
+  row_length = $('.target_row_del').length
+  if(row_length == 1){
+    $('.target_row_del').eq(0).prop('disabled', 'true')
+  }
+  else{
+    $('.target_row_del').removeAttr('disabled')
+    for(i=row_length-2;i>=0;i--){
+      $('.target_row_add').eq(i).css('visibility','hidden')
+    }
+  }
+  $('.target_row_add').eq(row_length-1).css('visibility','visible')
+}
+
+function AddRow(){
+  $('#target_container').append( material_row)
+  $('.target_row_add').off('click')
+  $('.target_row_add').on('click', AddRow)
+  $('.target_row_del').off('click')
+  $('.target_row_del').on('click', DelRow)
+  TrimButtons()
+}
+
+function DelRow(){
+  index_to_delete = $(this).index('.target_row_del')
+  $('.target_pallet_row').eq(index_to_delete).remove()
+  TrimButtons()
+}
+
+// SUBMIT BUTTON LISTENER / FUNCTION
+$('#target_submit').on('click', function(){
+
+  $('#origin_type').attr('value',  $('.target_origin_type.btn-dark').html()[0].toUpperCase()  )
+
+  $('#origin_location').attr('value',$('.target_origin_location.btn-dark').html()[0].toUpperCase())
+  $('#destination_type').attr('value',$('.target_destination_type.btn-dark').html()[0].toUpperCase())
+  $('#destination_location').attr('value',$('.target_destination_location.btn-dark').html()[0].toUpperCase())
+
+  // STRINGIFY THE MATERIAL LIST
+  material_list = []
+  for(i=0;i< $('.target_pallet_row').length ;i++){
+     material_list.push( [$('.target_row_material').eq(i).val(), $('.target_row_quantity').eq(i).val()]  )
+  }
+  $('#pallets').val(JSON.stringify(material_list))
+  // REMEMBER TO DO CHECKING HERE)
+  // SUBMIT THE FORM
+  $("#target_form").submit()
+
+})
+
+
+// TEXT EXPANSION AND CHECK FOR LATEST ONLY IF THE RECORD COUNT IS MORE THAN 1 - indicating a recent record
+text_expansion = { 'D':'Donation', 'O': 'Overflow', 'P': 'Processing', 'S':'Salesfloor' ,'I':'IRC','T':'TRMC','7':'700' }
+records_count = $('#mainTable tbody tr').length
+if(records_count >= 1){
+
+}
+
+
+
+</script>
+
+{% endblock %}

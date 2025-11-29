@@ -1,0 +1,326 @@
+
+{% extends 'pricing/spark_base.html' %}
+
+{% block title %}Pricing Stats - {{location}} - All Categories{% endblock %}
+
+
+{% block header_title %}Pricing - Stats  - {{location}}{% endblock %}
+
+
+{% block active_link %}
+
+{% endblock %}
+
+{% block content %}
+<!-- QueryBox -->
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+      <form method="GET">
+        <p>Please select the date range:</p>
+        <div class="row">
+          <!-- <div class="row"> -->
+          <div class="col">
+            <div class="form-group">
+    					<!-- <label class="form-label">Start Date</label> -->
+              <input class="form-control" type="date" name="start" value="{{start_date}}">
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <input class="form-control" type="date" name="end" value="{{end_date}}">
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <button class="form-control btn btn-primary btn-md" type="submit">SUBMIT</button>
+            </div>
+          </div>
+  			</div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- stats toolbar -->
+<div class="row">
+  <div class="col-md-4 col-lg-2 col-sm-12">
+    <div class="card">
+			<div class="card-body">
+				<div class="row">
+					<div class="col mt-0">
+						<h5 class="card-title">Total Pricing ($)</h5>
+					</div>
+
+					<div class="col-auto">
+						<div class="avatar">
+							<div class="avatar-title rounded-circle bg-primary-dark">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck align-middle"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+							</div>
+						</div>
+					</div>
+				</div>
+				<h1 class="display-5 mt-1 mb-3">${{total_pricing_value | floatformat:2}}</h1>
+				<div class="mb-0"><span class="text-danger"><i class="mdi mdi-arrow-bottom-right"></i></span>Total value of priced goods</div>
+			</div>
+		</div>
+  </div>
+  <div class="col-md-4 col-lg-2 col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col mt-0">
+            <h5 class="card-title">Total Items</h5>
+          </div>
+
+          <div class="col-auto">
+            <div class="avatar">
+              <div class="avatar-title rounded-circle bg-primary-dark">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck align-middle"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h1 class="display-5 mt-1 mb-3">{{total_items}}</h1>
+        <div class="mb-0">Total # of items priced</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-lg-2 col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col mt-0">
+            <h5 class="card-title">Total Submissions</h5>
+          </div>
+
+          <div class="col-auto">
+            <div class="avatar">
+              <div class="avatar-title rounded-circle bg-primary-dark">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck align-middle"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h1 class="display-5 mt-1 mb-3">{{pricing_submissions}}</h1>
+        <div class="mb-0">Total Pricing submissions</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-lg-2 col-sm-12">
+    <div class="card">
+			<div class="card-body">
+				<div class="row">
+					<div class="col mt-0">
+						<h5 class="card-title">Avg Item Price</h5>
+					</div>
+
+					<div class="col-auto">
+						<div class="avatar">
+							<div class="avatar-title rounded-circle bg-primary-dark">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck align-middle"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+							</div>
+						</div>
+					</div>
+				</div>
+				<h1 class="display-5 mt-1 mb-3">${{avg_item_price | floatformat:2}}</h1>
+				<div class="mb-0">Average price of items</div>
+			</div>
+		</div>
+  </div>
+  <div class="col-md-4 col-lg-2 col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col mt-0">
+            <h5 class="card-title">Items/Submission</h5>
+          </div>
+
+          <div class="col-auto">
+            <div class="avatar">
+              <div class="avatar-title rounded-circle bg-primary-dark">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck align-middle"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h1 class="display-5 mt-1 mb-3">{{items_per_submission | floatformat:2}}</h1>
+        <div class="mb-0">Avg Items per submission</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-lg-2 col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col mt-0">
+            <h5 class="card-title">TBD</h5>
+          </div>
+
+          <div class="col-auto">
+            <div class="avatar">
+              <div class="avatar-title rounded-circle bg-primary-dark">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck align-middle"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h1 class="display-5 mt-1 mb-3">TBD</h1>
+        <div class="mb-0">TBD Stat</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<div class="row">
+  <div class="col-sm-12 col-md-8">
+    <div class="card">
+    	<div class="card-header">
+    		<!-- <h5 class="card-title">TESTER</h5> -->
+    	</div>
+    	<div class="card-body">
+        <h2 class="pb-4">Breakdown by Cateogry / Product Type</h2>
+        <table id="mainTable1" class="table table-sm">
+          <thead><tr>
+            <th>Category</th>
+            <th>PRODUCT TYPE</th>
+            <th>Value</th>
+            <th>Items</th>
+            <th>Submissions</th>
+            <th>Avg. Submission Price</th>
+            <th>Items/Submission</th>
+          </tr></thead>
+          <tbody>
+            {% for i in PT %}
+              <tr>
+                <td>{{i.CAT}}</td>
+                <td>{{i.PT}}</td>
+                <td>${{i.PRICING_VALUE | floatformat:2}}</td>
+                <td>{{i.TOTAL_ITEMS}}</td>
+                <td>{{i.COUNT}}</td>
+                <td>{{i.AVG | floatformat:2}}</td>
+                <td>{{i.ITEM_SUBMISSIONS | floatformat:2}}</td>
+              </tr>
+            {% endfor %}
+          </tbody></table>
+
+    	</div>
+    </div>
+  </div>
+
+
+  <div class="col-sm-12 col-md-4">
+    <div class="card">
+      <div class="card-header"><!-- <h5 class="card-title">TESTER</h5> --></div>
+        <div class="card-body">
+        <h2 class="pb-4">Category Reference</h2>
+        <table id="CategoryReference" class="table table-sm">
+          <thead>
+            <tr><th>Category</th><th>Product Type</th></tr>
+          </thead>
+          <tbody>
+            <tr><td rowspan="3">Books & Media</td><td>BOOKS</td></tr><tr><td>MOVIES</td></tr><tr><td>MUSIC</td></tr>
+            <tr><td rowspan="5">Building Materials & Tools</td><td>BUILDING MATERIALS</td></tr><tr><td>DOORS/WINDOWS</td></tr><tr><td>LIGHTING</td></tr><tr><td>LUMBER</td></tr><tr><td>TOOLS</td></tr>
+            <tr><td rowspan="1">Electronics</td><td>ELECTRONICS</td></tr>
+            <tr><td rowspan="6">Computers & Peripherals</td><td>DESKTOP</td></tr><tr><td>LAPTOP</td></tr><tr><td>PERIPHERALS</td></tr><tr><td>TABLET</td></tr><tr><td>SMARTPHONE</td></tr><tr><td>OTHER COMPUTER</td></tr>
+            <tr><td rowspan="2">Furniture & Appliances</td><td>APPLIANCES</td></tr><tr><td>FURNITURE</td></tr>
+            <tr><td rowspan="6">Housewares</td><td>HOUSEWARES</td></tr><tr><td>HOLIDAY</td></tr><tr><td>JEWELRY</td></tr><tr><td>SEASONAL</td></tr><tr><td>BICYCLE</td></tr><tr><td>BICYCLE PARTS</td></tr>
+            <tr><td rowspan="4">Textiles</td><td>ACCESSORIES</td></tr><tr><td>CLOTHING</td></tr><tr><td>LINENS</td></tr><tr><td>SHOES</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+<!-- STAFF BREADKLDOWN -->
+<div class="row">
+  <div class="col-sm-12 col-md-9">
+    <div class="card">
+    	<div class="card-header">
+    		<!-- <h5 class="card-title">TESTER</h5> -->
+    	</div>
+    	<div class="card-body">
+        <h2 class="pb-4">Breakdown by STAFF ID</h2>
+        <table id="mainTable2" class="table table-sm">
+          <thead><tr>
+            <th>Staff ID</th>
+            <th>Value</th>
+            <th>Items</th>
+            <th>Submissions</th>
+            <th>Avg. Price*</th>
+            <th>Items/Submission</th>
+          </tr></thead>
+          <tbody>
+            {% for i in ST %}
+              <tr>
+                <td>{{i.ST}}</td>
+                <td>${{i.PRICING_VALUE | floatformat:2}}</td>
+                <td>{{i.TOTAL_ITEMS}}</td>
+                <td>{{i.COUNT}}</td>
+                <td>{{i.AVG | floatformat:2}}</td>
+                <td>{{i.ITEM_SUBMISSIONS | floatformat:2}}</td>
+              </tr>
+            {% endfor %}
+          </tbody></table>
+
+    	</div>
+    </div>
+  </div>
+</div>
+
+<!-- BY DATE -->
+<div class="row">
+  <div class="col">
+    <div class="card">
+    	<div class="card-header">
+    		<!-- <h5 class="card-title">TESTER</h5> -->
+    	</div>
+    	<div class="card-body">
+        <h2 class="pb-4">Datewise Breadkwon by PRODUCT_TYPE (TESTING / WORK IN PROGRESS)</h2>
+        <table id="dateTable" class="table table-sm">
+          <thead><tr>
+            {% for i in cats%}
+            <th>{{i}}</th>
+            {% endfor %}
+          </tr></thead>
+          <tbody>
+            {% for i in DT %}
+              <tr>
+                  {% for j in i.values %}
+                    <td>{{j}}</td>
+                  {% endfor %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    	</div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+{% block javascript_end %}
+
+<script type="text/javascript">
+
+  $('#mainTable1').DataTable({dom:'Bfrtip','pageLength': 50, buttons:['copy','csv','print']})
+  $('#mainTable2').DataTable({dom:'Bfrtip','pageLength': 50, buttons:['copy','csv','print']})
+  $('#dateTable').DataTable({dom:'Bfrtip','pageLength': 50, buttons:['copy','csv','print']})
+
+</script>
+
+
+
+{% endblock %}

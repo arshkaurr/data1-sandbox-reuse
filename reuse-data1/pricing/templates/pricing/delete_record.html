@@ -1,0 +1,75 @@
+
+{% extends 'pricing/spark_base.html' %}
+
+{% load tz %}
+{% block title %}DELETE RECORD ID:{{R.id}} - CONFIRM{% endblock %}
+
+
+{% block header_title %}DELETE RECORD ID:{{R.id}} - CONFIRM{% endblock %}
+
+
+{% block active_link %}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+	<div class="col-12 col-xl-9">
+
+    <div class="card pt-3">
+			<div class="card-header">
+				<h5 class="card-title">Record Details:</h5>
+			</div>
+			<div class="card-body">
+				<form action="{% url 'pricing:delete_submit' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="id" value="{{R.id}}">
+					<div class="form-group pb-3">
+            <p class="pt-1">Submission Time: <strong>{% timezone "US/Eastern" %}{{R.timestamp}}{% endtimezone %}</strong></p>
+            <p class="pt-1">Product Type: <strong>{{R.variant__product__product_type__product_type}}</strong></p>
+            <p class="pt-1">Quantity: <strong>{{R.quantity}}</strong></p>
+            <p class="pt-1">Staff ID: <strong>{{R.staff_id}}@fingerlakesreuse.org</strong></p>
+            {% if not R.deleted %}
+            <label class="custom-control custom-checkbox pt-3">
+		<input id="confirm_checkbox_id" type="checkbox" required="true" class="custom-control-input">
+		<span class="custom-control-label">I confirm this is my account. If not, please ask the account holder to perform this action</span>
+	    </label><br>
+            <label class="custom-control custom-checkbox pt-1">
+              <input id="confirm_checkbox_delete" type="checkbox" required="true" class="custom-control-input">
+              <span class="custom-control-label">I confirm that I want to DELETE the above record submission forever.</span>
+            </label>
+            {% else %}
+            <h1 class="pt-3">RECORD SUCCESSFULLY DELETED</h1>
+            {% endif %}
+					</div>
+          {% if not R.deleted %}
+					<button id="submit_button" type="submit" class="btn btn-lg btn-success">DELETE</button>
+          {% endif %}
+				</form>
+			</div>
+    </div>
+
+
+	</div>
+</div>
+
+
+
+{% endblock %}
+
+
+
+{% block javascript_end %}
+
+<script type="text/javascript">
+
+  $('#mainTable1').DataTable({dom:'Bfrtip','pageLength': 50, buttons:['copy','csv','print']})
+  $('#mainTable2').DataTable({dom:'Bfrtip','pageLength': 50, buttons:['copy','csv','print']})
+
+
+</script>
+
+
+
+{% endblock %}

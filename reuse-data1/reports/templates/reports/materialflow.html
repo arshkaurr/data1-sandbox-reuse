@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+   <head>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+      <meta charset="utf-8">
+      <title>ReUse Material Movement Form</title>
+      <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin="anonymous"></script>
+   </head>
+   <body>
+      <nav class="navbar navbar-dark bg-dark"><span class="navbar-brand mb-0 h1"><div class="container">MATERIAL FLOW REPORT</div></span></nav>
+      <div class="container">
+         <p></p>
+      </div>
+
+
+      <div class="container">
+        <div class="row">
+
+        </div>
+      </div>
+
+
+      <!-- START DATE RANGE CONTAINER -->
+            <div class="container">
+            <form method="GET">
+              <div class="row">
+                <div class="col form-group"><label>Start Date:</label>
+                  <input id="start_date" name="start" type="date" class="form-control" value="{{start_date}}" min="2019-11-01" max="{{max_date}}">
+                </div>
+                 <div class="col form-group"><label>End Date:</label>
+                   <input id="end_date" name="end" type="date" class="form-control" value="{{end_date}}" min="2019-11-01" max="{{max_date}}">
+                 </div>
+                <div class="col form-group"><label id="message_text">TEST{{message_text}}</label><br>
+                  <input id="submit_button" type="submit" class="btn btn-success btn-block" value="Submit">
+                </div>
+              </div>
+            </form>
+            </div>
+      <!-- END DATE RANGE CONTAINER -->
+
+
+      <hr>
+      <div class="container mb-5">
+        <div class="row">
+          <div class="col" align="center"><h4 style="padding-bottom:2%;" align="center">Overall Volumes (at DDO)</h4></div>
+        </div>
+        <div class="row">
+          <div class="col" align="center"><h5 class="display-3">*</h5></div>
+          <div class="col" align="center"><h5 class="display-3">{{total_pallets|floatformat:0}}</h5></div>
+          <div class="col" align="center"><h5 class="display-3">{{total_to_processing|floatformat:0}}</h5></div>
+          <div class="col" align="center"><h5 class="display-3">{{total_to_overflow|floatformat:0}}</h5></div>
+        </div>
+        <div class="row">
+          <div class="col" align="center"><p class="badge badge-success">Donations</p></div>
+          <div class="col" align="center"><p class="badge badge-success">Pallets</p></div>
+          <div class="col" align="center"><p class="badge badge-success">Pallets</p></div>
+          <div class="col" align="center"><p class="badge badge-success">Pallets</p></div>
+        </div>
+        <div class="row">
+          <div class="col" align="center"><h6><small>Individual Donations received</small></h6></div>
+          <div class="col" align="center"><h6><small>Total Volume that exited DDO</small></h6></div>
+          <div class="col" align="center"><h6><small>Volume sent to PROCESSING</small></h6></div>
+          <div class="col" align="center"><h6><small>OVERFLOW Volume (Storage)</small></h6></div>
+        </div>
+      </div>
+
+
+      <hr>
+      <div class="container mb-5">
+        <div class="row">
+          <div class="col" align="center"><h4 style="padding-bottom:2%;" align="center">Processing Volumes</h4></div>
+        </div>
+        <div class="row">
+          <div class="col" align="center"><h5 class="display-3">{{processing_from_ddo|floatformat:0}}</h5></div>
+          <div class="col" align="center"><h5 class="display-3">{{processing_from_overflow|floatformat:0}}</h5></div>
+          <div class="col" align="center"><h5 class="display-3">{{processing_to_irc|floatformat:0}}</h5></div>
+          <div class="col" align="center"><h5 class="display-3">{{processing_to_trc|floatformat:0}}</h5></div>
+          <!-- <div class="col" align="center"><h5 class="display-3">X</h5></div> -->
+        </div>
+        <div class="row">
+          <div class="col" align="center"><p class="badge badge-success">Pallets</p></div>
+          <div class="col" align="center"><p class="badge badge-success">Pallets</p></div>
+          <div class="col" align="center"><p class="badge badge-success">Pallets</p></div>
+          <div class="col" align="center"><p class="badge badge-success">Pallets</p></div>
+        </div>
+        <div class="row">
+          <div class="col" align="center"><h6><small>Volume sent for PROCESSING<br>(From DDO)</small></h6></div>
+          <div class="col" align="center"><h6><small>Volume sent for PROCESSING<br>(Pulled from OVERFLOW)</small></h6></div>
+          <div class="col" align="center"><h6><small>Volume sent to IRC Processing</small></h6></div>
+          <div class="col" align="center"><h6><small>Volume sent to TRC Processing</small></h6></div>
+          <!-- <div class="col" align="center"><h6><small>x</small></h6></div> -->
+        </div>
+      </div>
+
+
+
+
+
+      <div class="container" style="margin-top:3%;">
+      </div>
+   </body>
+</html>

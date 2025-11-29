@@ -1,0 +1,67 @@
+{% load socialaccount %}
+<html>
+  <head>
+    <title>Google Login - Finger Lakes ReUse Internal Portal</title>
+
+  </head>
+  <body>
+  <h1>Finger Lakes ReUse Internal Portal (Beta)</h1>
+  {% if user.is_authenticated %}
+  <p><br></p>
+  <h1>You are logged In</h1>
+  <h2>Welcome, {{ user.email }}</h2>
+  <form method="post" action="/accounts/logout/">
+    {% csrf_token %}
+    <button onClick="openWin()"  type="submit">Logout of Portal</button>
+    <a target="_new" href="https://accounts.google.com/logout">Sign out or switch your Google account</a>
+  </form>
+  <p><br></p>
+  <h2>Visitor Tracker</h2>
+  <ul>
+    <li><a href="visitors/capacity">CAPACITY TRACKER - ALL LOCATIONS</a></li><br>
+
+    <li><a href="visitors/irc">IRC - Ithaca ReUse Center</a></li>
+    <li><a href="visitors/trc">MEGA-T - ReUse Mega Center (T)</a></li>
+    <li><a href="visitors/rch">MEGA-R - ReUse Mega Center (R)</a></li>
+    <li><a href="visitors/700-WAREHOUSE">700-WAREHOUSE</a></li>
+  </ul>
+
+
+
+  <p><br></p>
+  <h2>Pricing Portal(s) (Please use the correct one!)</h2>
+  <ul>
+    <li><a href="pricing/portal/trmc">RMC Pricing Portal (MegaCenter!)</a></li><br>
+    <li><a href="pricing/portal/irc">IRC Pricing Portal (IRC ONLY!)</a></li>
+  </ul>
+
+  <p><br></p>
+  <h2>Pricing Statistics (New)</h2>
+  <ul>
+    <li><a href="pricing/stats/trmc">RMC Pricing Stats (MegaCenter!)</a></li>
+    <li><a href="pricing/stats/irc">IRC Pricing Stats (IRC ONLY!)</a></li>
+  </ul>
+
+  <p><br></p>
+  <h2>GIFT CARD PORTAL (New)</h2>
+  <ul>
+    <li><a href="/giftcardportal">Gift Card Portal: For accessing QuickbookPOS store credits!</a></li>
+  </ul>
+
+  <p><br></p>
+  <h2>Material Tracking</h2>
+  <ul>
+    <li><a href="mm">Material Movement Tracking - TRC/IRC/RCH</a></li><br>
+  </ul>
+
+
+  {% else %}
+  <h1>Please Login to Access the Portal</h1>
+  <a href="{% provider_login_url 'google' %}"><button>Login with Google</button></a>
+  {% endif %}
+    {% csrf_token %}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+  </body>
+</html>

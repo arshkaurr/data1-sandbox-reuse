@@ -1,0 +1,82 @@
+{% extends 'pricing/spark_base.html' %}
+
+{% block title %}PRIVATE / WIP - Material Movement - RAW{% endblock %}
+{% block header_title %}PRIVATE / WIP - Material Movement - RAW{% endblock %}
+
+{% load tz %}
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+      <form method="GET">
+        <p>Please select the date range:</p>
+        <div class="row">
+          <!-- <div class="row"> -->
+          <div class="col">
+            <div class="form-group">
+    					<!-- <label class="form-label">Start Date</label> -->
+              <input class="form-control" type="date" name="start" value="{{start_date}}">
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <input class="form-control" type="date" name="end" value="{{end_date}}">
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <button class="form-control btn btn-primary btn-md" type="submit">SUBMIT</button>
+            </div>
+          </div>
+  			</div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-3">
+  <div class="col">
+    <div class="card pt-2 mb-2 text-center">
+      <div class="card-header"><h3 class="card-title">Material Movement Between Sites</h3><h6 class="card-subtitle text-muted"></h6></div>
+      <div class="card-body">
+        <div id="targetTable">
+
+          <table id="mainTable" class="table table-sm"><thead><tr><th>Staff ID</th><th>Date/Time</th><th>Origin Type</th><th>Origin Location</th><th>Destination Type</th><th>Destination Location</th><th>PRODUCT TYPE</th><th>Pallets</th></tr></thead>
+            <tbody>
+              {% for i in RECORDS %}
+                <tr>
+                  <td>{{i.movement__staff_id}}</td>
+                  <td>{% timezone "US/Eastern" %}{{i.movement__timestamp | date:"SHORT_DATETIME_FORMAT"}}{% endtimezone %}</td>
+                  <td>{{i.movement__origin_type}}</td>
+                  <td>{{i.movement__origin_location}}</td>
+                  <td>{{i.movement__destination_type}}</td>
+                  <td>{{i.movement__destination_location}}</td>
+                  <td>{{i.product_type__product_type}}</td>
+                  <td>{{i.quantity}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+
+
+{% block javascript_end %}
+
+<script type="text/javascript">
+  $('#mainTable').DataTable({dom:'Bfrtip', 'pageLength': 50 ,buttons:['copy','csv','print']})
+</script>
+
+{% endblock %}

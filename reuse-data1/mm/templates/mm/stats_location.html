@@ -1,0 +1,308 @@
+{% extends 'pricing/spark_base.html' %}
+
+{% block title %}Material Movement - STATS -> {{location}}{% endblock %}
+{% block header_title %}Material Movement - STATS -> {{location}}{% endblock %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+      <form method="GET">
+        <p>Please select the date range:</p>
+        <div class="row">
+          <!-- <div class="row"> -->
+          <div class="col">
+            <div class="form-group">
+    					<!-- <label class="form-label">Start Date</label> -->
+              <input class="form-control" type="date" name="start" value="{{start_date}}">
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <input class="form-control" type="date" name="end" value="{{end_date}}">
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <button class="form-control btn btn-primary btn-md" type="submit">SUBMIT</button>
+            </div>
+          </div>
+  			</div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- Stats Boxes Row -->
+<div class="row mt-3">
+  <div class="col-md-3 col-lg-3 col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col mt-0">
+            <h5 class="card-title">Donations Volume (Est.)</h5>
+          </div>
+          <div class="col-auto">
+            <div class="avatar">
+              <div class="avatar-title rounded-circle bg-primary-dark">
+                <i class="align-middle fas fa-fw fa-box-open"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h1 class="display-5 mt-1 mb-3">{{donations_received}}</h1>
+        <div class="mb-0">Pallets originating at Donations</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 col-lg-3 col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col mt-0">
+            <h5 class="card-title">Sent to Overflow</h5>
+          </div>
+          <div class="col-auto">
+            <div class="avatar">
+              <div class="avatar-title rounded-circle bg-primary-dark">
+                <i class="align-middle fas fa-fw fa-download"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h1 class="display-5 mt-1 mb-3">{{sent_to_overflow}}</h1>
+        <div class="mb-0">Pallets ending up at Overflow</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 col-lg-3 col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col mt-0">
+            <h5 class="card-title">Pulled out of Overflow</h5>
+          </div>
+          <div class="col-auto">
+            <div class="avatar">
+              <div class="avatar-title rounded-circle bg-primary-dark">
+                <i class="align-middle fas fa-fw fa-upload"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h1 class="display-5 mt-1 mb-3">{{pulled_from_overflow}}</h1>
+        <div class="mb-0">Pallets originating from Overflow</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 col-lg-3 col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col mt-0">
+            <h5 class="card-title">Processed Volume (Est.)</h5>
+          </div>
+          <div class="col-auto">
+            <div class="avatar">
+              <div class="avatar-title rounded-circle bg-primary-dark">
+                <i class="align-middle fas fa-fw fa-store"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h1 class="display-5 mt-1 mb-3">{{processing_volume}}</h1>
+        <div class="mb-0">Pallets sent to Processing/Salesfloor</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 1. Donations Volume -->
+<div class="row mt-5">
+  <div class="col-md-6 col-sm-12">
+    <div class="card pt-2 mb-2">
+      <div class="card-header"><h5 class="card-title">Donations Volume (Est.)</h5><h6 class="card-subtitle text-muted">Estimated by aggregating palles originating from Donations (origin_type=Donations)</h6></div>
+      <div class="card-body">
+        <div>
+          <table id="donations_volume_table" class="table table-sm"><thead><tr><th>Category</th><th>Prodcuct Type</th><th>Pallets</th><th>Percentage</th></tr></thead>
+            <tbody>
+              {% for i in donations_received_table %}
+              <tr><td>{{i.Category}}</td><td>{{i.product_type__product_type}}</td><td>{{i.Pallets}}</td><td>{{i.Percentage | floatformat:2}}%</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-sm-12">
+    <div class="card pt-2 mb-2">
+      <div class="card-header"><h5 class="card-title">Donations Volume (Est.)</h5><h6 class="card-subtitle text-muted"></h6></div>
+      <div class="card-body">
+        <div id="donations_received_chart">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Sent to Overflow -->
+<div class="row mt-5">
+  <div class="col-md-6 col-sm-12">
+    <div class="card pt-2 mb-2">
+      <div class="card-header"><h5 class="card-title">Sent to Overflow</h5><h6 class="card-subtitle text-muted">Pallets sent to Overflow at the location. (destination=Overflow)<br>Note: These might include Pallets coming from other locations too</h6></div>
+      <div class="card-body">
+        <div>
+          <table id="sent_to_overflow_table" class="table table-sm"><thead><tr><th>Category</th><th>Prodcuct Type</th><th>Pallets</th><th>Percentage</th></tr></thead>
+            <tbody>
+              {% for i in sent_to_overflow_table %}
+              <tr><td>{{i.Category}}</td><td>{{i.product_type__product_type}}</td><td>{{i.Pallets}}</td><td>{{i.Percentage | floatformat:0}}%</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-sm-12">
+    <div class="card pt-2 mb-2">
+      <div class="card-header"><h5 class="card-title">Sent to Overflow</h5><h6 class="card-subtitle text-muted"></h6></div>
+      <div class="card-body">
+        <div id="sent_to_overflow_chart">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. pulled Overflow -->
+<div class="row mt-5">
+  <div class="col-md-6 col-sm-12">
+    <div class="card pt-2 mb-2">
+      <div class="card-header"><h5 class="card-title">Pulled out of Overflow</h5><h6 class="card-subtitle text-muted">Pallets that we removed from the overflow at the location. (origin=Overflow)<br>Note: These might include Pallets were sent to other locations.</h6></div>
+      <div class="card-body">
+        <div>
+          <table id="pulled_from_overflow_table" class="table table-sm"><thead><tr><th>Category</th><th>Prodcuct Type</th><th>Pallets</th><th>Percentage</th></tr></thead>
+            <tbody>
+              {% for i in pulled_from_overflow_table %}
+              <tr><td>{{i.Category}}</td><td>{{i.product_type__product_type}}</td><td>{{i.Pallets}}</td><td>{{i.Percentage | floatformat:0}}%</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-sm-12">
+    <div class="card pt-2 mb-2">
+      <div class="card-header"><h5 class="card-title">Pulled out of Overflow</h5><h6 class="card-subtitle text-muted"></h6></div>
+      <div class="card-body">
+        <div id="pulled_from_overflow_chart">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. processing volume -->
+<div class="row mt-5">
+  <div class="col-md-6 col-sm-12">
+    <div class="card pt-2 mb-2">
+      <div class="card-header"><h5 class="card-title">Processing Volume (Est.)</h5><h6 class="card-subtitle text-muted">Estimated Volume of material that was processed at the location. Estimated by querying destination=processing OR salesfloor<br>Note (IMPORTANT): Pallets originating at 'Processing' and ended up at the 'Salefloor' were exluded to avoid double reporting of estimated Processed volume.</h6></div>
+      <div class="card-body">
+        <div>
+          <table id="processing_volume_table" class="table table-sm"><thead><tr><th>Category</th><th>Prodcuct Type</th><th>Pallets</th><th>Percentage</th></tr></thead>
+            <tbody>
+              {% for l in processing_volume_table %}
+              <tr><td>{{l.Category}}</td><td>{{l.product_type__product_type}}</td><td>{{l.Pallets}}</td><td>{{l.Percentage | floatformat:2}}%</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-sm-12">
+    <div class="card pt-2 mb-2">
+      <div class="card-header"><h5 class="card-title">Processing Volume (Est.)</h5><h6 class="card-subtitle text-muted"></h6></div>
+      <div class="card-body">
+        <div id="processing_volume_chart">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+{% block javascript_end %}
+<script type="text/javascript">
+
+
+// 1. DONATIONS RECEIVED
+var donations_received_chart_options = {
+  series: {{donations_received_vals | safe}},
+  labels:{{donations_received_labels | safe}},
+  chart: { type: 'donut'},
+  stroke: { colors: ['#fff'] },
+  fill: { opacity: 0.8 },
+};
+var donations_received_chart = new ApexCharts(document.querySelector("#donations_received_chart"), donations_received_chart_options);
+donations_received_chart.render();
+
+
+// 2. SENT TO OVERFLOW
+var sent_to_overflow_options = {
+  series: {{sent_to_overflow_vals | safe}},
+  labels:{{sent_to_overflow_labels | safe}},
+  chart: { type: 'donut'},
+  stroke: { colors: ['#fff'] },
+  fill: { opacity: 0.8 },
+};
+var sent_to_overflow_chart = new ApexCharts(document.querySelector("#sent_to_overflow_chart"), sent_to_overflow_options);
+sent_to_overflow_chart.render();
+
+// 3. Pulled from Overflow
+var pulled_from_overflow_options = {
+  series: {{pulled_from_overflow_vals | safe}},
+  labels:{{pulled_from_overflow_labels | safe}},
+  chart: { type: 'donut'},
+  stroke: { colors: ['#fff'] },
+  fill: { opacity: 0.8 },
+};
+var pulled_from_overflow_chart = new ApexCharts(document.querySelector("#pulled_from_overflow_chart"), pulled_from_overflow_options);
+pulled_from_overflow_chart.render();
+
+// 4. Processing Volume
+var processing_volume_options = {
+  series: {{processing_volume_vals | safe}},
+  labels:{{processing_volume_labels | safe}},
+  chart: { type: 'polarArea'},
+  stroke: { colors: ['#fff'] },
+  fill: { opacity: 0.8 },
+};
+var processing_volume_chart = new ApexCharts(document.querySelector("#processing_volume_chart"), processing_volume_options);
+processing_volume_chart.render();
+
+
+
+// RENDER THE TABLES WITH DATATABLES
+datatables_dict = {dom:'Bfrtip','pageLength': 50, buttons:[], 'bFilter': false, 'bInfo':false, 'paging':false}
+$('#donations_volume_table').DataTable(datatables_dict)
+$('#sent_to_overflow_table').DataTable(datatables_dict)
+$('#pulled_from_overflow_table').DataTable(datatables_dict)
+$('#processing_volume_table').DataTable(datatables_dict)
+
+</script>
+{% endblock %}

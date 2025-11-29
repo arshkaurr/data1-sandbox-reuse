@@ -1,0 +1,105 @@
+{% extends 'pricing/spark_base.html' %}
+
+
+
+
+
+{% block title %}Quickbooks Gift Cards - LOOKUP{% endblock %}
+
+
+{% block header_title %}Quickbooks Gift Cards - LOOKUP{% endblock %}
+
+
+
+{% block active_link %}
+
+{% endblock %}
+
+
+
+{% block content %}
+
+
+
+<div class="row">
+	<div class="col-12 col-xl-9">
+
+    <div class="card">
+			<div class="card-header">
+				<h5 class="card-title">Select the Quickbooks POS customer's Temporary Code</h5>
+				<h6 class="pt-3 card-subtitle text-muted">Note: This is a temporary system to pull giftcard codes for customers in Quickbooks POS. New giftcards will be issued directly to customers and are printable at the register</h6>
+			</div>
+			<div class="card-body">
+				<form action="{% url 'qbgiftcard:lookup' %}" method="POST"><!--COMMENT -->{% csrf_token %}<!--COMMENT -->
+					<div class="form-group">
+						<label class="form-label">Customer Name (Quikcbooks POS)</label><br>
+						<select name="customer_id" id="customer_id" required>
+              <option selected='true' disabled='true'>(Please select one)</option>
+            </select>
+					</div>
+					<div class="form-group pt-3 pb-3">
+            <p class="pt-1">Staff ID: <strong>{{request.user.email}}</strong></p>
+						<label class="custom-control custom-checkbox">
+							<input id="confirm_checkbox" type="checkbox" required="true" class="custom-control-input">
+							<span class="custom-control-label">Confirm selection - Access of this giftcard will be logged.</span>
+						</label>
+					</div>
+					<button id="submit_button" type="submit" class="btn btn-primary">View Giftcard Code</button>
+				</form>
+			</div>
+    </div>
+
+
+    <div class="accordion" id="accordionExample">
+			<div class="card">
+				<div class="card-header" id="headingOne">
+					<h5 class="card-title my-2">
+						<a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="collapsed">Manually Select from list  - (Using the Search Box) </a>
+					</h5>
+				</div>
+				<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample" style="">
+					<div class="card-body">
+            <table class="table" id="mainTable">
+							<thead>
+								<tr>
+									<th style="width:40%;">Name</th>
+									<th style="width:25%">Phone</th>
+									<th class="d-none d-md-table-cell" style="width:25%">Email</th>
+									<th>Select</th>
+								</tr>
+							</thead>
+							<tbody id='customer_table'>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+
+
+
+{% block javascript_end %}
+
+<script type="text/javascript">
+  let customer_dict = {{customer_dict | safe}}
+
+  // Rend the dropdown and table
+  for(i=0;i<customer_dict.length;i++){
+    c = customer_dict[i]
+    $('#customer_id').append( '<option value="'  +   c[0]  +   '">'    +    c[2]  + ', ' +  c[1] + '  >  '  +  c[3] +  ' > '  +  c[4]    +  '</option>')
+    $('#customer_table').append('<tr><td>' + c[1] + ' ' + c[2] + '</td><td>' + c[3] + '</td><td class="d-none d-md-table-cell">' + c[4] + '</td><td class="table-action"><a class="select-button" id="' + c[0] + '" href="#"><i class="align-middle fas fa-fw fa-arrow-circle-right"></i></a></td></tr>')
+
+    $('.select-button').on('click', function(){
+      t = $(this).prop('id')
+      $('#confirm_checkbox').prop('checked', false)
+      $('#customer_id').prop('value', t)
+    })
+
+  }
+  $('#mainTable').DataTable()
+</script>
+{% endblock %}

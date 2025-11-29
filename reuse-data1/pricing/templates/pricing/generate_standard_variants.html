@@ -1,0 +1,69 @@
+{% extends 'pricing/spark_base.html' %}
+
+
+{% block title %}Generate Standard Variants{% endblock %}
+
+{% block header_title %}Generate Standard Variants - PLEASE USE CAUTION!{% endblock %}
+
+
+
+{% block content %}
+
+
+<div class="row">
+  <div class="col">
+    <div class="card p-3 my-2">
+			<div class="card-header">
+				<h2 class=" mb-0 display-6 text-danger">{{MESSAGE | safe}}</h2>
+			</div>
+		</div>
+
+<div class="row">
+  <div class="col">
+    <div class="card p-3 my-2">
+			<div class="card-header">
+				<h5 class="card-title mb-0 h1">Data1: Generate variants between $1 - $1500 in Data1</h5>
+			</div>
+			<div class="card-body">
+        <p class="card-text">Instructions: Make a new product in data1, and make sure there are NO variants attached to it. This function will search data1 for the product handle you entered, verify that there are no variants connected to it, and only then create variants for it. See the output above once the page refreshes.</p>
+        <div class="row mb-3">
+          <div class="col-auto">
+            <form method="POST">{% csrf_token %}
+            <label>Data1 Product HANDLE: </label>
+            <input class="mx-3" type="text" id="targetDiscount" name="data1_handle" maxlength="5" minlength="5">
+            <button type="submit" class="btn btn-primary" id="dropPricesButton">GERNATE DATA1 VARIANTS</button>
+            </form>
+          </div>
+        </div>
+			</div>
+		</div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <div class="card p-3 my-2">
+			<div class="card-header">
+				<h5 class="card-title mb-0 h1">SHOPIFY: Generate variants between $1 - $1500 in Shopify</h5>
+			</div>
+			<div class="card-body">
+				<p class="card-text">Instructions: Make a new product in SHOPIFY. Enter a 5 character HANDLE (Edit Website SEO). The first character must be W/R/G/B/Y/O/L. Make sure the item is NOT visible online and is visible in the POS Channel. Enter the VENDOR and 'TITLE -[C,L]'.Make sure there are NO variants under it, becuase all of them will be REMOVED. This function will search SHOPIFY for the product handle you entered, and if it exists, will create the standard progression of variants from $1 - 1500 </p>
+        <div class="row mb-3">
+          <div class="col-auto">
+            <form method="POST">{% csrf_token %}
+            <label>Shopify Product HANDLE: </label>
+            <input class="mx-3" type="text" id="targetDiscount" name="shopify_handle" maxlength="5" minlength="5">
+            <button type="submit" class="btn btn-primary" id="dropPricesButton">GERNATE SHOPIFY VARIANTS</button>
+            </form>
+          </div>
+        </div>
+			</div>
+		</div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block javascript_end %}
+{% endblock %}

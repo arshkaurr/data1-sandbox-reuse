@@ -1,0 +1,108 @@
+
+{% extends 'pricing/spark_base.html' %}
+
+{% block title %}Pricing - RAW Data - {{location}}{% endblock %}
+
+
+{% block header_title %}Pricing - RAW Data - {{location}}{% endblock %}
+
+
+{% block active_link %}
+<a class="sidebar-link" href="/pricing/portal/trmc"><i class="align-middle mr-2 fas fa-fw fa-home"></i>
+  <span class="align-middle">RAW Pricing Data - {{location}}</span>
+    <!-- <span class="sidebar-badge badge rounded-pill bg-primary">New</span> -->
+  </a>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+    	<!-- <div class="card-header">
+    		<h5 class="card-title"></h5>
+    	</div> -->
+
+      <div class="card-body">
+      <form method="GET">
+        <p>Please select the date range:</p>
+        <div class="row">
+          <!-- <div class="row"> -->
+          <div class="col">
+            <div class="form-group">
+    					<!-- <label class="form-label">Start Date</label> -->
+              <input class="form-control" type="date" name="start" value="{{start_date}}">
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <!-- <label class="form-label">End Date</label> -->
+              <input class="form-control" type="date" name="end" value="{{end_date}}">
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <!-- <span>GOOGLE</span> -->
+              <!-- <label class="form-label">Start Date</label> -->
+              <button class="form-control btn btn-primary btn-md" type="submit">SUBMIT</button>
+            </div>
+          </div>
+  			</div>
+      </form>
+      </div>
+
+
+    	</div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+    	<div class="card-header">
+    		<h5 class="card-title"></h5>
+    	</div>
+    	<div class="card-body">
+
+        <table id="mainTable" class="table table-sm">
+          <thead><tr>
+            <th>Barcode</th>
+            <th>Product Type</th>
+            <th>Tag</th>
+            <th>Product</th>
+            <th>Variant</th>
+            <th>Price ($)</th>
+            <th>Total Quantity</th>
+            <th>VALUE ($)</th>
+          </tr></thead>
+          <tbody>
+            {% load tz %}
+            {% for i in P %}
+              <tr>
+                <td>{{i.variant__variant}}</td>
+                <td>{{i.variant__product__product_type__product_type}}</td>
+                <td>{{i.variant__product__classifier}}</td>
+                <td>{{i.variant__product__title}}</td>
+                <td>{{i.variant__title}}</td>
+                <td>{{i.variant__price}}</td>
+                <td>{{i.TOTAL_QUANTITY}}</td>
+                <td>{{i.TOTAL_VALUE}}</td>
+              </tr>
+            {% endfor %}
+          </tbody></table>
+
+    	</div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+
+{% block javascript_end %}
+
+<script type="text/javascript">
+  $('#mainTable').DataTable({dom:'Bfrtip', 'pageLength': 50 ,buttons:['copy','csv','print']})
+</script>
+
+{% endblock %}

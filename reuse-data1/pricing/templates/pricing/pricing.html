@@ -1,0 +1,378 @@
+{% extends 'pricing/spark_base.html' %}
+
+{% block title %}Pricing Portal > {{TEXT}} - {% endblock %}
+
+
+{% block header_title %}Pricing Portal > {{TEXT}}{% endblock %}
+
+
+{% block active_link %}
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="row">
+  <div class="col-12">
+		<div class="card" style="background:#eee;">
+
+      {% block TAGS_TEMP %}
+			<div class="card-body">
+        <div class="tab">
+      		<ul class="nav nav-tabs" role="tablist">
+      			<li class="nav-item"><a class="targetTabChange nav-link active" href="#current-tab" data-toggle="tab" role="tab" aria-selected="true">{{CColor}}</a></li>
+      			<li class="nav-item"><a class="targetTabChange nav-link" href="#white-tab" data-toggle="tab" role="tab" aria-selected="false">White</a></li>
+      			<li class="nav-item"><a class="targetTabChange nav-link" href="#unit-tab" data-toggle="tab" role="tab" aria-selected="false">Unit Priced(White)</a></li>
+      		</ul>
+      		<div class="tab-content">
+      			<div class="tab-pane active" id="current-tab" role="tabpanel">
+              <p>{{CColor}} Tagged Items with Standard Prices...</p>
+              {% for i in products_color %}
+              <button id="{{i.shopify_handle}}" type="button" class="btn {{CColor}}-tag btn-lg">{{i.title}}</button>
+              {% endfor %}
+      			</div>
+      			<div class="tab-pane" id="white-tab" role="tabpanel">
+              <p>White tagged items with standard prices. Use these for items that will not automatically go through the automatic discount system.</p>
+              {% for i in products_white %}
+              <button id="{{i.shopify_handle}}" type="button" class="btn White-tag btn-lg">{{i.title}}</button>
+              {% endfor %}
+      			</div>
+      			<div class="tab-pane" id="unit-tab" role="tabpanel">
+              <p>Unit priced tags: Please print these on white tags.</p>
+
+              {% for i in products_unit %}
+              <button id="{{i.shopify_handle}}" type="button" class="btn Unit-tag btn-lg">{{i.title}}</button>
+              {% endfor %}
+
+      			</div>
+      		</div>
+      	</div>
+			</div>
+      {% endblock %}
+
+		</div>
+</div>
+</div>
+<div class="row">
+<form>
+  <div class="col-12">
+    <div class="card">
+			<div class="card-header">
+				<h5 class="card-title mb-0">Select Variant (Price Point) & Quantity:</h5>
+			</div>
+			<div class="card-body">
+        <div class="row">
+          <div class="col">
+      			<select class="form-control mb-3" name="variant" id="targetVariant">
+      				<option selected="">Please select a Tag above</option>
+      			</select>
+          </div>
+          <div class="col">
+            <select class="form-control mb-3" name="quantity" id="targetQuantity">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="15">15 - (BULK)</option>
+              <option value="20">20 - (BULK)</option>
+              <option value="25">25 - (BULK)</option>
+              <option value="30">30 - (BULK)</option>
+              <option value="35">35 - (BULK)</option>
+              <option value="40">40 - (BULK)</option>
+              <option value="45">45 - (BULK)</option>
+              <option value="50">50 - (BULK)</option>
+              <option value="60">60 - (BULK)</option>
+              <option value="70">70 - (BULK)</option>
+              <option value="80">80 - (BULK)</option>
+              <option value="100">100- (BULK)</option>
+            </select>
+          </div>
+          <div class="row mt-4">
+            <div class="col-3">
+              <input class="form-check-input" name="inventory" id="targetInventory" type="checkbox" value="inventory" checked><span class="ml-2 form-check-label">Add to Inventory</span>
+            </div>
+            <div class="col-3">
+              <input class="form-check-input" name="print" id="targetPrint" type="checkbox" value="print" checked><span class="ml-2 form-check-label">Print Labels</span>
+            </div>
+            <div class="col">
+              <button type="button" id="targetSubmit" class="btn btn-lg btn-primary form-control" disabled>SUBMIT</button>
+            </div>
+          </div>
+
+
+        </div>
+
+
+			</div>
+		</div>
+  </div>
+
+
+
+</form>
+</div>
+
+<!-- THE CONSOLE PROMPT-->
+<!-- <div class="row">
+  <div class="col-12">
+    <div class="card pt-2 mb-2">
+				<h3 class="text-center" id="message">(Select a Tag to get started)</h3>
+		</div>
+  </div>
+</div> -->
+
+<!-- THE TABLE -->
+<div class="row mt-3">
+  <div class="col-12">
+    <div class="card pt-2 mb-2">
+      <div class="card-header">
+				<h5 class="card-title">My Pricing History ({{request.user.email}})</h5>
+				<h6 class="card-subtitle text-muted">List of your last 20 items submitted to the inventory. You now have the ability to 'Delete' submissions after confirmation, for submissions made the same day. Please check your pricing records at the end of your day/shift!</h6>
+			</div>
+      <div class="card-body">
+        <div id="targetTable"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+
+{% block javascript_end %}
+<script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+
+
+<script type="text/javascript">
+// PULL OBJECTS FROM DJANGO
+// let products_white = {{products_white | safe}}
+// let products_color = {{products_color | safe}}
+let products_unit_test = {{products_unit_test | safe}}
+let price_progression = [1,2,3,4,5,6,7,8,9,10,  12,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120,125,   150,175,200,225,250,275,300,325,350,375,400,425,450,475,500,525,550,575,600,625,650,675,700,725,750,775,800,825,850,875,900,925,950,975,  1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500]
+let color_reference = {'W':'White','U':'Unit Priced (White)', 'R':'Red', 'B':'Blue', 'Y':'Yellow', 'G':'Green', 'O':'Orange', 'L':'Lavender'}
+//INITIALIZE THE targetOBJECT which holds values for submit check with DEFAULTS
+var targetOBJECT = {
+  "variant" : "satan",
+  "quantity" : "1",
+  "inventory" : "1",
+  "print" : "1",
+  "handle" : "",
+}
+
+
+
+function buttonStd(){
+
+  targetOBJECT['handle'] = $(this).prop('id')
+  $('#targetSubmit').removeAttr('disabled')
+
+  $(".selected-button").removeClass('selected-button')
+  $(this).addClass('selected-button')
+
+  $('#targetVariant').html('')
+  for(i=0;i<price_progression.length;i++){
+    $('#targetVariant').append('<option id="OP' + i + '" value="'+ targetOBJECT['handle'] + price_progression[i] + '">$ ' + price_progression[i] + '</option>')
+  }
+
+  color = color_reference[$(this).prop('id')[0]]
+  $('#message').html('SELECTED: ' + color + ' > ' + $(this).html())
+
+  $("#targetInventory").prop("checked", true)
+  $("#targetPrint").prop('checked', true)
+  checkboxFunction()
+}
+
+function buttonUnit(){
+  targetOBJECT['handle'] = $(this).prop('id')
+  $('#targetSubmit').removeAttr('disabled')
+
+  $(".selected-button").removeClass('selected-button')
+  $(this).addClass('selected-button')
+
+  A = products_unit_test[$(this).prop('id')]
+  $('#targetVariant').html('')
+  for(i=0;i<A.length;i++){
+    $('#targetVariant').append('<option id="OP' + i + '" value="'+ A[i][0] + '">' + A[i][1] + '  -  [$ ' + A[i][2] + ']</option>')
+  }
+
+  color = color_reference[$(this).prop('id')[0]]
+  $('#message').html('SELECTED: ' + color + ' > ' + $(this).html())
+
+  $("#targetInventory").prop("checked", true)
+  $("#targetPrint").prop('checked', true)
+  checkboxFunction()
+}
+
+
+
+function submitFunction(){
+  // DO THE CHECKS - inventory option buttons
+  if($("#targetInventory").prop("checked") == true ){
+    targetOBJECT['inventory'] = "1"
+  }else{
+    targetOBJECT['inventory'] = "0"
+  }
+  //Check the Print option
+  if($("#targetPrint").prop("checked") == true ){
+    targetOBJECT['print'] = "1"
+  }else{
+    targetOBJECT['print'] = "0"
+  }
+  // Initialize those check box values
+  targetOBJECT['quantity'] = $('#targetQuantity').prop('value')
+  targetOBJECT['variant'] = $('#targetVariant').prop('value')
+
+
+  //Generate the Print URL
+  print_url = '/pricing/submit?' + jQuery.param(targetOBJECT)
+
+  //Get the current message on the Message label
+  current_message = $('#message').html()
+
+  //Decide if you want to print and then Submit Messages appropriately
+  if(targetOBJECT['print']=='1' && targetOBJECT['inventory']=='0'){
+    // alert('I selected to PRINT but NOT INVENTORY')
+    $('#message').html('Printed Sucessfully (NOT Added to Inventory)')
+    printJS(print_url)
+  }
+
+  if(targetOBJECT['print']=='1' && targetOBJECT['inventory']=='1'){
+    // alert('I selected PRINT AND INVENTORY')
+    $('#message').html('>> SUCCESS: Added to Inventory & Printed')
+    printJS(print_url)
+  }
+
+  if(targetOBJECT['print']=='0' && targetOBJECT['inventory']=='1'){
+    $('#message').html(' >> (Submitting to Inventory only)...in progress')
+    /////////////////////////////
+    xhr = new XMLHttpRequest();
+    xhr.open('get', print_url)
+    xhr.send()
+
+    $("#targetMessage").html("")
+
+    xhr.onreadystatechange = function(){
+      if (xhr.readyState === 4){
+    $('#message').html(' >> SUCCESS: Item has been added to Inventory!')
+        // renderTable()
+      }
+    }
+    //////////////////////////
+    //Disable the checkbox
+    // $("#targetInventory").prop("checked", false)
+    // $("#targetSubmit").prop('disabled', true)
+
+
+
+
+  }
+
+window.setTimeout(renderTable, 1000);
+$('#targetQuantity').prop('value',1)
+
+$("#targetInventory").prop("checked", true)
+checkboxFunction()
+
+}
+
+
+// IMPORTRANT CHECK FUNCTION - rendering checkboxes
+function checkboxFunction(){
+
+
+// 4 conditions to check
+  if($("#targetInventory").prop("checked") == true){
+    $('#targetSubmit').removeAttr('disabled')
+    $('#targetSubmit').removeClass('btn-danger')
+    $('#targetSubmit').addClass('btn-primary')
+
+    if($('#targetPrint').prop('checked') == true){
+        $('#targetSubmit').html('Add to Inventory + PRINT')
+    }
+    else {
+      $('#targetSubmit').html('Add to Inventory ONLY')
+    }
+
+  }
+  else {
+
+    if($('#targetPrint').prop('checked') == true){
+      $('#targetSubmit').html("PRINT ONLY (Will not be added to inventory)")
+      $('#targetSubmit').removeAttr('disabled')
+      $('#targetSubmit').removeClass('btn-primary')
+      $('#targetSubmit').addClass('btn-danger')
+    }
+    else {
+      $('#targetSubmit').html('Please select Inventory/Print options')
+      $('#targetSubmit').prop('disabled','true')
+      $('#targetSubmit').removeClass('btn-danger')
+      $('#targetSubmit').addClass('btn-primary')
+    }
+  }
+
+  // alert(targetOBJECT['handle'].length)
+  if(targetOBJECT['handle'].length == 0){
+    $('#targetSubmit').prop('disabled','true')
+    $('#targetSubmit').html('Please select an Item to continue')
+  }
+
+
+}
+
+
+function renderTable(){
+  $('#targetTable').html('')
+  xhr1 = new XMLHttpRequest()
+  xhr1.open('get', "{% url 'pricing:my_pricing_table' %}")
+  xhr1.send()
+
+  xhr1.onreadystatechange = function(){
+    if (xhr1.readyState === 4){
+      $('#targetTable').html(xhr1.response)
+    }
+  }
+}
+
+function tabChange(){
+  $('.selected-button').removeClass('selected-button')
+  targetOBJECT['handle'] = ''
+  checkboxFunction()
+}
+
+
+$(document).ready(function(){
+    $(".Unit-tag").on('click', buttonUnit)
+    $(".White-tag").on('click', buttonStd)
+    $(".Lavender-tag").on('click', buttonStd)
+    $(".Yellow-tag").on('click', buttonStd)
+    $(".Blue-tag").on('click',buttonStd)
+    $(".Orange-tag").on('click',buttonStd)
+    $(".Green-tag").on('click',buttonStd)
+    $(".Red-tag").on('click',buttonStd)
+    $("#targetSubmit").on("click", submitFunction)
+    $("#targetSubmit").prop('disabled','true')
+    $('.form-check-input').on('click',checkboxFunction)
+
+    $("#targetInventory").prop("checked",'true')
+    $("#targetPrint").prop("checked",'true')
+
+    $('.targetTabChange').on('click', tabChange)
+
+
+    renderTable()
+    checkboxFunction()
+
+})
+
+</script>
+
+{% endblock %}

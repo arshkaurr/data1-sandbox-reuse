@@ -1,0 +1,443 @@
+{% extends 'pricing/spark_base.html' %}
+
+
+{% block title %}Update POS Prices{% endblock %}
+
+{% block header_title %}Update POS Prices - PLEASE USE CAUTION!{% endblock %}
+
+
+
+{% block content %}
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+      <form method="GET">
+        <div class="row">
+          <!-- <div class="row"> -->
+          <div class="col">
+            <div class="form-group">
+    					<!-- <label class="form-label">Start Date</label> -->
+              <h3>Select the desired date: </h3>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <input class="form-control" type="date" name="date" value="{{date}}" min="2021-01-05">
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <button class="form-control btn btn-primary btn-md" type="submit">CHANGE DATE & RELOAD</button>
+            </div>
+          </div>
+  			</div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="row">
+
+  <div class="col">
+    <div class="card">
+			<h2 class="card-title p-2 text-center">PRICING</h2>
+			<div class="card-body {{color_rotations.pricing}}-color">
+				<div class="row">
+					<div class="col-auto">
+					</div>
+				</div>
+				<h1 class="text-center display-5 my-2">{{color_rotations.pricing}}</h1>
+			</div>
+      <button class="btn btn-sm btn-dark targetColorButton targetPricing" id="{{color_rotations.pricing}}">FILL QUEUE</button>
+		</div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+			<h2 class="card-title p-2 text-center">-</h2>
+			<div class="card-body {{color_rotations.hold}}-color">
+				<div class="row">
+					<div class="col-auto">
+					</div>
+				</div>
+				<h1 class="text-center display-5 my-2">{{color_rotations.hold}}</h1>
+			</div>
+      <button class="btn btn-sm btn-dark targetColorButton targetHold" id="{{color_rotations.hold}}">FILL QUEUE</button>
+		</div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+			<h2 class="card-title p-2 text-center">25% Off</h2>
+			<div class="card-body {{color_rotations.25}}-color">
+				<div class="row">
+					<div class="col-auto">
+					</div>
+				</div>
+				<h1 class="text-center display-5 my-2">{{color_rotations.25}}</h1>
+			</div>
+      <button class="btn btn-sm btn-dark targetColorButton target25" id="{{color_rotations.25}}">FILL QUEUE</button>
+		</div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+			<h2 class="card-title p-2 text-center">50% Off</h2>
+			<div class="card-body {{color_rotations.50}}-color">
+				<div class="row">
+					<div class="col-auto">
+					</div>
+				</div>
+				<h1 class="text-center display-5 my-2">{{color_rotations.50}}</h1>
+			</div>
+      <button class="btn btn-sm btn-dark targetColorButton target50" id="{{color_rotations.50}}">FILL QUEUE</button>
+		</div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+			<h2 class="card-title p-2 text-center">75% Off</h2>
+			<div class="card-body {{color_rotations.75}}-color">
+				<div class="row">
+					<div class="col-auto">
+					</div>
+				</div>
+				<h1 class="text-center display-5 my-2">{{color_rotations.75}}</h1>
+			</div>
+      <button class="btn btn-sm btn-dark targetColorButton target75" id="{{color_rotations.75}}">FILL QUEUE</button>
+		</div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <h2 class="card-title p-2 text-center text-danger ">RESET to 0%</h2>
+      <div class="card-body {{color_rotations.reset}}-color">
+        <div class="row">
+          <div class="col-auto">
+          </div>
+        </div>
+        <h1 class="text-center display-5 my-2">{{color_rotations.reset}}</h1>
+      </div>
+      <button class="btn btn-sm btn-dark targetColorButton targetReset" id="{{color_rotations.reset}}">FILL QUEUE</button>
+    </div>
+  </div>
+
+
+</div>
+
+
+
+
+<div class="row">
+  <div class="col">
+    <div class="card p-3 my-2">
+			<div class="card-header">
+				<h5 class="card-title mb-0 h1">QUEUE</h5>
+			</div>
+			<div class="card-body">
+				<p class="card-text">This is queue of product prices to be dropped. STATUS CODE 200=SUCCESS; STATUS CODE 422 usually means that you are dropping the price and SRU status to what is already is. To force the change, it would be best to drop the prices to a different number first, then do the process again with your desired discount value.</p>
+        <div class="row mb-3">
+          <div class="col-auto">
+            <label>Discount Percentage: </label>
+            <input class="mx-3" type="number" min=0 max=100 step=1 value=0 id="targetDiscount">
+            <input class="form-check-input mt-1" id="targetSRU" type="checkbox" value="option2"><label for="" class="px-2">SRU Eligible</label>
+            <button class="btn btn-primary" id="dropPricesButton">DROP ALL PRICES IN QUEUE</button>
+            <button class="btn btn-success" id="resetQueueButton">CLEAR QUEUE (Remove all)</button>
+            <div class="progress mt-3">
+              <div id="targetProgress" class="progress-bar bg-danger" role="progressbar" style="width: 0;" aria-valuemin="0" aria-valuemax="100">0%</div>
+            </div>
+            <!-- <div class="row progress-bar bg-primary-dark" role="progressbar" style="width: 43%;" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100">43%</div> -->
+          </div>
+        </div>
+
+        <div class="table-sm">
+					<table class="table mb-0">
+						<thead>
+              <tr>
+								<th>Queue Order</th>
+								<th>PRODUCT</th>
+								<th>STATUS</th>
+							</tr>
+						</thead>
+						<tbody id="targetQueue">
+						</tbody>
+					</table>
+				</div>
+
+
+
+			</div>
+		</div>
+
+
+
+
+
+    <div class="card p-3 my-4">
+			<div class="card-header">
+				<h5 class="card-title mb-0 h1">ALL THE PRODUCTS</h5>
+			</div>
+			<div class="card-body">
+				<p class="card-text">Use this menu to find products and ADD THEM TO THE QUEUE.</p>
+
+
+        <div class="table-sm">
+					<table id="allProductsTable" class="table mb-0">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Handle</th>
+								<th>Location</th>
+								<th>Color</th>
+                <th>Product_Type</th>
+								<th>Category</th>
+								<th>ADD TO QUEUE</th>
+							</tr>
+						</thead>
+						<tbody>
+              {% for i in all_products.values %}
+              <tr class="dbProducts">
+								<td>{{i.id}}</td>
+								<td>{{i.shopify_handle}}</td>
+                <td>{{i.location__location}}</td>
+								<td>{{i.classifier}}</td>
+                <td>{{i.product_type__product_type}}</td>
+								<td>{{i.product_type__category__category}}</td>
+
+                <td><button type="button" id="{{i.shopify_handle}}" class="btn-sm btn btn-primary targetAdd">ADD</button></td>
+							</tr>
+              {% endfor %}
+						</tbody>
+					</table>
+				</div>
+
+
+
+			</div>
+		</div>
+
+
+    <div class="card p-4 my-5">
+			<div class="card-header">
+				<h1 class="card-title mb-0 h1">ALL THE PRODUCTS - Dynamic LOOKUP / SEARCH</h1>
+			</div>
+			<div class="card-body">
+				<p class="card-text">Use this dynamic list to search, sort, and find products</p>
+
+
+        <div class="table-sm">
+					<table id="allProductsTable2" class="table mb-0">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Handle</th>
+								<th>Location</th>
+								<th>Color</th>
+                <th>Product_Type</th>
+								<th>Category</th>
+							</tr>
+						</thead>
+						<tbody>
+              {% for i in all_products.values %}
+              <tr class="dbProducts2">
+								<td>{{i.id}}</td>
+								<td>{{i.shopify_handle}}</td>
+                <td>{{i.location__location}}</td>
+								<td>{{i.classifier}}</td>
+                <td>{{i.product_type__product_type}}</td>
+								<td>{{i.product_type__category__category}}</td>
+							</tr>
+              {% endfor %}
+						</tbody>
+					</table>
+				</div>
+
+
+
+			</div>
+		</div>
+
+
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+{% block javascript_end %}
+<script type="text/javascript">
+
+  $('#allProductsTable2').DataTable({'pageLength': 50})
+
+
+  let all_products = {{all_products | safe}}
+  let add_button_html = '<button type="button" class="btn-sm btn btn-success targetDelete">Remove</button>'
+  // ATTACH LISTNER FOR PRODUCT BUTTONS (targetAdd)
+
+  function addRow(HANDLE){
+    $('#targetQueue').append('<tr class="targetRow"><td>' + add_button_html  + '</td><td class="targetHandle">' + HANDLE + '</td><td class="targetStatus">ADDED</td></tr>')
+    $('button.targetDelete').off()
+    $('button.targetDelete').on('click', delRowFunction)
+    $('#' + HANDLE).prop('disabled','true')
+  }
+
+
+  function delRow(HANDLE){
+
+  }
+
+  function delRowFunction(){
+    // DIRECTLY REMOVE THE ROW BASED ON INDEX
+    index_to_delete = $(this).index('.targetDelete')
+    button_to_reenable = $('.targetHandle').eq(index_to_delete).html()
+    $('#'+button_to_reenable).removeAttr('disabled')
+    $('.targetRow').eq(index_to_delete).remove()
+
+  }
+
+  function addButtonFunction(){
+    selected_handle = $(this).prop('id')
+    addRow(selected_handle)
+  }
+
+
+  function resetRows(){
+    $('.targetAdd').removeAttr('disabled')
+    $('.targetRow').remove()
+    $('.targetColorButton').removeAttr('disabled')
+    $('#dropPricesButton').removeAttr('disabled')
+    $('#targetSRU').removeAttr('disabled')
+    $('#targetDiscount').removeAttr('disabled')
+    $('#targetProgress').css('width',"0%")
+    $('#targetProgress').addClass('bg-danger')
+    }
+
+  function addColorButtonFunction(){
+    // 0. First CLEAR OUT THE QUEUE!
+    resetRows()
+
+    // 1. Get selected color
+    selected_color = $(this).prop('id')
+    holder = []
+    // 2. Find all products matching that color and dump it in the holder array
+    for (const [key, value] of Object.entries(all_products)) {
+      if(selected_color==value['classifier']){
+          holder.push(key)
+      }
+    }
+    // 3. For each element in the holder array, add that 'handle' to the Queue
+    for (i=0;i<holder.length;i++){
+      addRow(holder[i])
+    }
+
+
+
+  }
+
+////////////////////////////////////////////
+// IMPORTANT > XHR FUNCTION!
+  // function dropPriceAtRow(ID){
+  //   $('.targetStatus').eq(ID).html('WORKING.................')
+  // }
+///////////////////////////////////////////////
+
+
+
+////////////////////////////////////////////
+  function dorpPricesFunction(){
+    // Step 1: Diable all other button so folks cant F***k around
+    $('.targetAdd').prop('disabled','true')
+    $('button.targetDelete').prop('disabled','true')
+    $('button.targetColorButton').prop('disabled','true')
+    $('#dropPricesButton').prop('disabled','true')
+    $('#resetQueueButton').prop('disabled','true')
+    $('.targetStatus').html('pending....')
+    $('.targetStatus').addClass('targetStatusPending')
+    $('#targetDiscount').prop('disabled','true')
+    $('#targetSRU').prop('disabled','true')
+    dropNextInQueue()
+  }
+
+
+  function dropNextInQueue(){
+    t = $('.targetStatus').length
+    l =  $('.targetStatusPending').length
+    $('#targetProgress').css('width',String(((t-l)/t)*100)+"%")
+    $('#targetProgress').html(String(Math.round(((t-l)/t)*100))+"%")
+
+    if(l<1){
+      console.log('END')
+      $('#targetProgress').removeClass('bg-danger')
+      $('#resetQueueButton').removeAttr('disabled')
+
+
+    }else{
+      temp_index = $('.targetStatus').index( $('.targetStatusPending').eq(0)  )
+      temp_obj = {}
+      temp_obj['handle'] = $('.targetHandle').eq(temp_index).html()
+
+      //SET SRU Status
+      if($('#targetSRU').prop('checked')){
+        temp_obj['sru'] = 1
+      }else{
+        temp_obj['sru'] = 0
+      }
+      temp_obj['discount'] = $('#targetDiscount').prop('value')
+
+      $('.targetStatus').eq(temp_index).removeClass('targetStatusPending')
+      $('.targetStatus').eq(temp_index).html('IN PROGRESS')
+
+      var oReq = new XMLHttpRequest()
+      oReq.timeout = 20000
+      oReq.ontimeout = reqTimeout
+      oReq.addEventListener("load", reqListener)
+
+      oReq.open("GET", "{% url "pricing:update_pos_item" %}?"+  jQuery.param(temp_obj))
+      oReq.send()
+      console.log("HERE > {% url "pricing:update_pos_item" %}?"+  jQuery.param(temp_obj))
+
+    }
+  }
+
+  function reqTimeout(){
+    dropNextInQueue()
+  }
+
+  function reqListener() {
+    temp_url = new URL(this.responseURL)
+    temp_params = new URLSearchParams(temp_url.searchParams)
+    temp_handle = temp_params.get('handle')
+    console.log('RECEIVED RESPONSE!', temp_url, temp_handle)
+    for(i=0;i<$('.targetHandle').length;i++){
+      if($('.targetHandle').eq(i).html()==temp_handle){
+        $('.targetStatus').eq(i).html('<strong>'+ this.responseText +'</strong>')
+      }
+    }
+
+    dropNextInQueue()
+  }
+
+
+  // LISTNERS
+  $('.targetAdd').on('click', addButtonFunction)
+  $('button.targetColorButton').on('click', addColorButtonFunction)
+  $('#resetQueueButton').on('click', resetRows)
+  $('#dropPricesButton').on('click', dorpPricesFunction)
+
+  $('.targetPricing').on('click', function(){$('#targetDiscount').prop('value', 0); $('#targetSRU').prop('checked', true)})
+  $('.targetHold').on('click', function(){$('#targetDiscount').prop('value', 0); $('#targetSRU').prop('checked', true)})
+  $('.target25').on('click', function(){$('#targetDiscount').prop('value', 25); $('#targetSRU').prop('checked', false)})
+  $('.target50').on('click', function(){$('#targetDiscount').prop('value', 50); $('#targetSRU').prop('checked', false)})
+  $('.target75').on('click', function(){$('#targetDiscount').prop('value', 75); $('#targetSRU').prop('checked', false)})
+  $('.targetReset').on('click', function(){$('#targetDiscount').prop('value', 0); $('#targetSRU').prop('checked', true)})
+
+  // console.log({{correction}})
+</script>
+
+{% endblock %}
