@@ -1,5 +1,5 @@
 from django.shortcuts import render, reverse, redirect
-from django.http import HttpResponse, FileResponse
+from django.http import HttpResponse, FileResponse, JsonResponse
 from django.db.models import Sum, Avg, Count, Min, Max, ExpressionWrapper, F, DecimalField, DateTimeField
 from django.db.models.functions import Trunc, Extract
 import requests
@@ -22,6 +22,14 @@ from time import sleep
 from collections import defaultdict
 
 from local_settings import *
+
+
+def wants_json_response(request):
+    fmt = request.GET.get('format', '')
+    if fmt.lower() == 'json':
+        return True
+    accept_header = request.headers.get('Accept', '')
+    return 'application/json' in accept_header.lower()
 
 
 def pricing_portal_legacy(request, location):
@@ -58,10 +66,19 @@ def pricing_portal_legacy(request, location):
     CColor = color_reference[CC]
     print(CC,CColor)
 
-    if LOCATION=='T':
-        return render(request, 'pricing/pricing_trmc.html',{'products_std': products_std, 'products_unit':products_unit_test, 'CColor' : CColor, 'CC': CC })  ###########FOLLOWUP : TESTING NEW FORMAT FOR DICT
-    elif LOCATION == 'I':
-        return render(request, 'pricing/pricing_irc.html',{'products_std': products_std, 'products_unit':products_unit_test, 'CColor' : CColor, 'CC': CC })
+    context = {
+        'products_std': products_std,
+        'products_unit': products_unit_test,
+        'CColor': CColor,
+        'CC': CC,
+        'LOCATION': LOCATION,
+    }
+
+    if wants_json_response(request):
+        return JsonResponse(context, json_dumps_params={'default': str})
+
+    template = 'pricing/pricing_trmc.html' if LOCATION == 'T' else 'pricing/pricing_irc.html'
+    return render(request, template, context)
 
 
 
@@ -107,17 +124,25 @@ def pricing_portal(request, location):
     for i in V:
         products_unit_test[ i['variant'][:5] ].append([  i['variant'],i['title'],f"{i['price']:.2f}"  ])
 
-    return_dict = {
+    context = {
         'products_white': products_white,
-        'products_color':products_color,
-        'products_unit':products_unit,
-        'products_unit_test':products_unit_test,
-        'CColor' : CColor, 'CC': CC,
-        'LOCATION':LOCATION,
-        'TEXT':TEXT
+        'products_color': products_color,
+        'products_unit': products_unit,
+        'products_unit_test': products_unit_test,
+        'CColor': CColor,
+        'CC': CC,
+        'LOCATION': LOCATION,
+        'TEXT': TEXT
     }
 
-    return render(request, 'pricing/pricing.html',return_dict)
+    if wants_json_response(request):
+        json_payload = context.copy()
+        json_payload['products_white'] = list(products_white)
+        json_payload['products_color'] = list(products_color)
+        json_payload['products_unit'] = list(products_unit)
+        return JsonResponse(json_payload, json_dumps_params={'default': str})
+
+    return render(request, 'pricing/pricing.html', context)
 
 
 
@@ -146,6 +171,8 @@ def pricing_submit(request):
     if not request.user.is_authenticated:
         return redirect('HOME')
 
+    json_requested = wants_json_response(request)
+
     try:
         VARIANT = request.GET['variant']
         PRINT = bool(int(request.GET['print']))
@@ -169,10 +196,24 @@ def pricing_submit(request):
 
         #GENERATE CODE
 	    # HARDCODE EMERGENCY #JAN27 2022
+        if json_requested:
+            return JsonResponse({
+                'status': 'ok',
+                'variant': VARIANT,
+                'print': PRINT,
+                'inventory': INVENTORY,
+                'quantity': QUANTITY,
+                'title': TITLE,
+                'color': color_reference[V.variant[0]]
+            }, json_dumps_params={'default': str})
+
         X = barcode_reuse_1(VARIANT, V.price, TITLE, color_reference[V.variant[0]], ' '.join(VARIANT[:5]), QUANTITY)
         return FileResponse(X, as_attachment=False, filename="barcode.pdf")
 
     except:
+
+        if json_requested:
+            return JsonResponse({'status': 'error'}, status=400)
 
         E = barcode_reuse_1('ERORR', 0, 'ERROR', 'ERROR', 'ERROR', 1)
         return FileResponse(E, as_attachment=False, filename="barcode-ERROR.pdf")
@@ -189,6 +230,8 @@ def my_pricing_table(request):
 
     response_html = '<table id="mainTable" class="table table-sm"><thead><tr><th>ID</th><th>Date/Time</th><th>Tag</th><th>Product</th><th>Variant</th><th>Price</th><th>Quantity</th><th>DELETE</th></tr></thead><tbody>'
     classifier_choices = {'U':'Unit','W':'White','Y':'Yellow','R':'Red','O':'Orange','B':'Blue','G':'Green','L':'Lavender'}
+    json_requested = wants_json_response(request)
+    rows = []
 
 
     QUERY = Pricing.objects.filter(staff_id=request.user.email.split('@')[0], inventory=True, deleted=False)\
@@ -196,14 +239,30 @@ def my_pricing_table(request):
         .values('variant__product__classifier','variant__title','timestamp','variant__product__title','variant__price', 'quantity', 'id')
 
     for i in QUERY:
+        timestamp_eastern = i['timestamp'].astimezone(tz=pytz.timezone('US/Eastern'))
+        timestamp_display = datetime.strftime(timestamp_eastern,'%a %d/%m/%y - %I:%M %p')
         # IF the timestamp is not less than a day old, render the delete button > so that folks can delete it if needed.
         if i['timestamp'] > timezone.now()-timedelta(days=1):
             delete_button_html = f'<a target="_new" href="{reverse("pricing:delete_record", kwargs={"record":i["id"]})}" class="btn btn-success btn-sm" role="button" aria-pressed="true">DEL</a>'
         else:
             delete_button_html = '-'
-        response_html += f"<tr><td>{i['id']}</td><td>{datetime.strftime(i['timestamp'].astimezone(tz=pytz.timezone('US/Eastern')),'%a %d/%m/%y - %I:%M %p') }</td><td>{classifier_choices[i['variant__product__classifier']]}</td><td>{i['variant__product__title']}</td><td>{i['variant__title']}</td><td>{i['variant__price']}</td><td>{i['quantity']}</td><td>{delete_button_html}</td>"
+        response_html += f"<tr><td>{i['id']}</td><td>{timestamp_display}</td><td>{classifier_choices[i['variant__product__classifier']]}</td><td>{i['variant__product__title']}</td><td>{i['variant__title']}</td><td>{i['variant__price']}</td><td>{i['quantity']}</td><td>{delete_button_html}</td>"
+        rows.append({
+            'id': i['id'],
+            'timestamp': timestamp_eastern.isoformat(),
+            'timestamp_display': timestamp_display,
+            'tag': classifier_choices[i['variant__product__classifier']],
+            'product': i['variant__product__title'],
+            'variant': i['variant__title'],
+            'price': i['variant__price'],
+            'quantity': i['quantity'],
+            'delete_url': reverse("pricing:delete_record", kwargs={"record":i["id"]}),
+            'can_delete': i['timestamp'] > timezone.now()-timedelta(days=1),
+        })
 
     response_html += f'</tbody></table>'
+    if json_requested:
+        return JsonResponse({'rows': rows}, json_dumps_params={'default': str})
     return HttpResponse(response_html)
 
 
@@ -278,12 +337,19 @@ def raw(request,location):
 
 
 
-    return render(request, 'pricing/raw.html',{
-        'location':location,
+    context = {
+        'location': location,
         'P': P,
-        'start_date' : start_date.strftime('%Y-%m-%d'),
-        'end_date' : end_date.strftime('%Y-%m-%d'),
-    })
+        'start_date': start_date.strftime('%Y-%m-%d'),
+        'end_date': end_date.strftime('%Y-%m-%d'),
+    }
+
+    if wants_json_response(request):
+        json_payload = context.copy()
+        json_payload['P'] = list(P)
+        return JsonResponse(json_payload, json_dumps_params={'default': str})
+
+    return render(request, 'pricing/raw.html', context)
 
 
 
@@ -361,26 +427,41 @@ def stats(request, location=''):
 #     print(['cats'] + cats)
 
 
+    json_dt = []
+    for row in DT_table:
+        json_row = row.copy()
+        if isinstance(json_row.get('date'), datetime):
+            json_row['date'] = json_row['date'].isoformat()
+        json_dt.append(json_row)
+
     try:
         avg_item_price = total_pricing_value / total_items
     except:
         avg_item_price = ''
 
-    return render(request, 'pricing/stats.html',{
-        'location' : location,
-        # 'P': P,
-        'start_date' : start_date.strftime('%Y-%m-%d'),
-        'end_date' : end_date.strftime('%Y-%m-%d'),
-        'total_items' :  total_items,
-        'total_pricing_value' : total_pricing_value,
-        'pricing_submissions' : Qu.count(),
-        'avg_item_price' : avg_item_price,
-        'items_per_submission' : items_per_submission,
-        'PT' : PT,
-        'ST' : ST,
-        'DT' : DT_table,
-        'cats' : ['date'] + cats,   # HAVE TO APPEND THE DATE BEFORE RENDERING THE FIELDS
-    })
+    context = {
+        'location': location,
+        'start_date': start_date.strftime('%Y-%m-%d'),
+        'end_date': end_date.strftime('%Y-%m-%d'),
+        'total_items': total_items,
+        'total_pricing_value': total_pricing_value,
+        'pricing_submissions': Qu.count(),
+        'avg_item_price': avg_item_price,
+        'items_per_submission': items_per_submission,
+        'PT': PT,
+        'ST': ST,
+        'DT': DT_table,
+        'cats': ['date'] + cats,
+    }
+
+    if wants_json_response(request):
+        json_payload = context.copy()
+        json_payload['PT'] = list(PT)
+        json_payload['ST'] = list(ST)
+        json_payload['DT'] = json_dt
+        return JsonResponse(json_payload, json_dumps_params={'default': str})
+
+    return render(request, 'pricing/stats.html', context)
 
 ######################
 # NEW HOME > RENDERS THE LINKS FOR HOME  #TOVA
@@ -444,6 +525,22 @@ def update_pos(request):
     return render(request, 'pricing/update_pos.html', return_dict)
 
 
+
+def color_wheel_data(request):
+    if not request.user.is_staff:
+        return JsonResponse({'detail': 'Authentication required'}, status=403)
+
+    try:
+        date = datetime.strptime(request.GET['date'], '%Y-%m-%d').replace(tzinfo=pytz.timezone('US/Eastern'))
+    except:
+        date = timezone.now().astimezone(pytz.timezone('US/Eastern'))
+
+    rotations = color_wheel_2022(date)
+
+    return JsonResponse({
+        'date': date.strftime('%Y-%m-%d'),
+        'color_rotations': rotations,
+    }, json_dumps_params={'default': str})
 
 
 

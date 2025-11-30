@@ -1,5 +1,5 @@
 {% extends 'pricing/spark_base.html' %}
-
+{% load static %}
 
 {% block title %}Update POS Prices{% endblock %}
 
@@ -8,6 +8,8 @@
 
 
 {% block content %}
+
+<link rel="stylesheet" href="{% static 'frontend/colorwheel/index-CPlVkCw2.css' %}">
 
 <div class="row">
   <div class="col-12">
@@ -41,96 +43,11 @@
 
 
 
-<div class="row">
-
+<div class="row mt-3">
   <div class="col">
-    <div class="card">
-			<h2 class="card-title p-2 text-center">PRICING</h2>
-			<div class="card-body {{color_rotations.pricing}}-color">
-				<div class="row">
-					<div class="col-auto">
-					</div>
-				</div>
-				<h1 class="text-center display-5 my-2">{{color_rotations.pricing}}</h1>
-			</div>
-      <button class="btn btn-sm btn-dark targetColorButton targetPricing" id="{{color_rotations.pricing}}">FILL QUEUE</button>
-		</div>
+    <div id="color-wheel-root" class="w-100" data-date="{{ date }}"></div>
   </div>
-
-  <div class="col">
-    <div class="card">
-			<h2 class="card-title p-2 text-center">-</h2>
-			<div class="card-body {{color_rotations.hold}}-color">
-				<div class="row">
-					<div class="col-auto">
-					</div>
-				</div>
-				<h1 class="text-center display-5 my-2">{{color_rotations.hold}}</h1>
-			</div>
-      <button class="btn btn-sm btn-dark targetColorButton targetHold" id="{{color_rotations.hold}}">FILL QUEUE</button>
-		</div>
-  </div>
-
-  <div class="col">
-    <div class="card">
-			<h2 class="card-title p-2 text-center">25% Off</h2>
-			<div class="card-body {{color_rotations.25}}-color">
-				<div class="row">
-					<div class="col-auto">
-					</div>
-				</div>
-				<h1 class="text-center display-5 my-2">{{color_rotations.25}}</h1>
-			</div>
-      <button class="btn btn-sm btn-dark targetColorButton target25" id="{{color_rotations.25}}">FILL QUEUE</button>
-		</div>
-  </div>
-
-  <div class="col">
-    <div class="card">
-			<h2 class="card-title p-2 text-center">50% Off</h2>
-			<div class="card-body {{color_rotations.50}}-color">
-				<div class="row">
-					<div class="col-auto">
-					</div>
-				</div>
-				<h1 class="text-center display-5 my-2">{{color_rotations.50}}</h1>
-			</div>
-      <button class="btn btn-sm btn-dark targetColorButton target50" id="{{color_rotations.50}}">FILL QUEUE</button>
-		</div>
-  </div>
-
-  <div class="col">
-    <div class="card">
-			<h2 class="card-title p-2 text-center">75% Off</h2>
-			<div class="card-body {{color_rotations.75}}-color">
-				<div class="row">
-					<div class="col-auto">
-					</div>
-				</div>
-				<h1 class="text-center display-5 my-2">{{color_rotations.75}}</h1>
-			</div>
-      <button class="btn btn-sm btn-dark targetColorButton target75" id="{{color_rotations.75}}">FILL QUEUE</button>
-		</div>
-  </div>
-
-  <div class="col">
-    <div class="card">
-      <h2 class="card-title p-2 text-center text-danger ">RESET to 0%</h2>
-      <div class="card-body {{color_rotations.reset}}-color">
-        <div class="row">
-          <div class="col-auto">
-          </div>
-        </div>
-        <h1 class="text-center display-5 my-2">{{color_rotations.reset}}</h1>
-      </div>
-      <button class="btn btn-sm btn-dark targetColorButton targetReset" id="{{color_rotations.reset}}">FILL QUEUE</button>
-    </div>
-  </div>
-
-
 </div>
-
-
 
 
 <div class="row">
@@ -271,6 +188,7 @@
 
 
 {% block javascript_end %}
+<script type="module" src="{% static 'frontend/colorwheel/index-Bkq2AfKe.js' %}" defer></script>
 <script type="text/javascript">
 
   $('#allProductsTable2').DataTable({'pageLength': 50})

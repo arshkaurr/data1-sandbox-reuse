@@ -1,10 +1,19 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from mm.models import ExpandedMaterialMovement
 from django.db.models import Sum
 
 from datetime import datetime
+
+
+def wants_json_response(request):
+    fmt = request.GET.get('format', '')
+    if fmt.lower() == 'json':
+        return True
+    accept_header = request.headers.get('Accept', '')
+    return 'application/json' in accept_header.lower()
+
 
 # Create your views here.
 def materialflow(request):
@@ -36,15 +45,27 @@ def materialflow(request):
     e = ExpandedMaterialMovement.objects.filter(eDate__range=[start_date,end_date])
     print(len(e))
 
-    return render(request,'reports/materialflow.html', {
-    'start_date' : start_date,
-    'end_date' : end_date,
-    'total_pallets' : e.filter(eOrigin='donations').aggregate(Sum('ePallets'))['ePallets__sum'],
-    'total_to_processing' : e.filter(eOrigin='donations',eDestination='processing').aggregate(Sum('ePallets'))['ePallets__sum'],
-    'total_to_overflow' : e.filter(eOrigin='donations', eDestination='overflow').aggregate(Sum('ePallets'))['ePallets__sum'],
+    total_pallets = e.filter(eOrigin='donations').aggregate(Sum('ePallets'))['ePallets__sum']
+    total_to_processing = e.filter(eOrigin='donations',eDestination='processing').aggregate(Sum('ePallets'))['ePallets__sum']
+    total_to_overflow = e.filter(eOrigin='donations', eDestination='overflow').aggregate(Sum('ePallets'))['ePallets__sum']
+    processing_from_ddo = e.filter(eOrigin='donations', eDestination='processing').aggregate(Sum('ePallets'))['ePallets__sum']
+    processing_from_overflow = e.filter(eOrigin='overflow', eDestination='processing').aggregate(Sum('ePallets'))['ePallets__sum']
+    processing_to_irc = e.filter(eDestination='processing',eDestinationLocation='IRC').aggregate(Sum('ePallets'))['ePallets__sum']
+    processing_to_trc = e.filter(eDestination='processing',eDestinationLocation='TRC').aggregate(Sum('ePallets'))['ePallets__sum']
 
-    'processing_from_ddo' : e.filter(eOrigin='donations', eDestination='processing').aggregate(Sum('ePallets'))['ePallets__sum'],
-    'processing_from_overflow' : e.filter(eOrigin='overflow', eDestination='processing').aggregate(Sum('ePallets'))['ePallets__sum'],
-    'processing_to_irc' : e.filter(eDestination='processing',eDestinationLocation='IRC').aggregate(Sum('ePallets'))['ePallets__sum'],
-    'processing_to_trc' : e.filter(eDestination='processing',eDestinationLocation='TRC').aggregate(Sum('ePallets'))['ePallets__sum'],
-    })
+    context = {
+        'start_date': start_date,
+        'end_date': end_date,
+        'total_pallets': total_pallets,
+        'total_to_processing': total_to_processing,
+        'total_to_overflow': total_to_overflow,
+        'processing_from_ddo': processing_from_ddo,
+        'processing_from_overflow': processing_from_overflow,
+        'processing_to_irc': processing_to_irc,
+        'processing_to_trc': processing_to_trc,
+    }
+
+    if wants_json_response(request):
+        return JsonResponse(context, json_dumps_params={'default': str})
+
+    return render(request,'reports/materialflow.html', context)
