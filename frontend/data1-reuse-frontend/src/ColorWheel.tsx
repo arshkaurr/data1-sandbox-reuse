@@ -41,6 +41,14 @@ type ApiResponse = {
   color_rotations: RotationMap;
 };
 
+type QueueItem = {
+  handle: string;
+  title: string;
+  classification: string;
+  color: string;
+  quantity: number;
+};
+
 export type ColorWheelProps = {
   initialDate?: string;
 };
@@ -108,6 +116,51 @@ export default function ColorWheel({ initialDate }: ColorWheelProps) {
       description: STATUS_DESCRIPTION[key],
     }));
   }, [data]);
+
+  const mockQueue: QueueItem[] = [
+    {
+      handle: "furniture-sofa",
+      title: "Mid-Century Sofa",
+      classification: "Furniture",
+      color: "pricing",
+      quantity: 12,
+    },
+    {
+      handle: "electronics-laptop",
+      title: "Refurbished Laptop Lot",
+      classification: "Electronics",
+      color: "hold",
+      quantity: 6,
+    },
+    {
+      handle: "housewares-mix",
+      title: "Assorted Housewares Bin",
+      classification: "Housewares",
+      color: "25",
+      quantity: 18,
+    },
+    {
+      handle: "seasonal-holiday",
+      title: "Holiday Decor Pallet",
+      classification: "Seasonal",
+      color: "50",
+      quantity: 10,
+    },
+    {
+      handle: "computers-periph",
+      title: "Computer Peripherals Box",
+      classification: "Computers",
+      color: "75",
+      quantity: 22,
+    },
+    {
+      handle: "textiles-clothing",
+      title: "Clothing Rack",
+      classification: "Textiles",
+      color: "reset",
+      quantity: 30,
+    },
+  ];
 
   return (
     <section className="cw-panel">
@@ -197,6 +250,34 @@ export default function ColorWheel({ initialDate }: ColorWheelProps) {
               should be full price or discounted (25%, 50%, 75%) or ready for
               reset.
             </p>
+          </div>
+
+          <div className="cw-product-queue">
+            <div className="cw-product-queue-header">
+              <div>
+                <h3>Product Queue Preview</h3>
+                <p>Sample of items currently aligned with the color schedule.</p>
+              </div>
+              <button type="button" className="cw-expand">
+                Expand
+              </button>
+            </div>
+            <div className="cw-product-list">
+              {mockQueue.slice(0, 4).map((item) => (
+                <article key={item.handle} className="cw-product-card">
+                  <div>
+                    <p className="cw-product-title">{item.title}</p>
+                    <p className="cw-product-meta">
+                      <span>{item.classification}</span>
+                      <span>Qty: {item.quantity}</span>
+                    </p>
+                  </div>
+                  <span className={`cw-chip cw-chip-${item.color}`}>
+                    {item.color.toUpperCase()}
+                  </span>
+                </article>
+              ))}
+            </div>
           </div>
         </>
       )}

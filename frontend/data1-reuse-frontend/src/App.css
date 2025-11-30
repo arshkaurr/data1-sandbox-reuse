@@ -1,6 +1,11 @@
+:root {
+  --ui-radius: 10px;
+  --cw-fallback: #cbd5f5;
+}
+
 .cw-panel {
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: var(--ui-radius);
   padding: 2rem 1.5rem 1.5rem;
   background: #fff;
   display: flex;
@@ -33,7 +38,7 @@
 
 .cw-date-picker input {
   border: 1px solid #cbd5f5;
-  border-radius: 8px;
+  border-radius: var(--ui-radius);
   padding: 0.4rem 0.6rem;
   font-size: 0.95rem;
 }
@@ -47,10 +52,6 @@
   color: #b91c1c;
 }
 
-:root {
-  --cw-fallback: #cbd5f5;
-}
-
 .cw-current {
   display: flex;
   flex-direction: column;
@@ -62,7 +63,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  border-radius: 12px;
+  border-radius: var(--ui-radius);
   border: 1px solid #e2e8f0;
 }
 
@@ -99,7 +100,7 @@
 
 .cw-queue-card {
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: var(--ui-radius);
   padding: 1rem;
   background: #f8fafc;
   display: flex;
@@ -145,6 +146,76 @@
   margin: 0 0 0.35rem 0;
 }
 
+.cw-product-queue {
+  border: 1px solid #e5e7eb;
+  border-radius: var(--ui-radius);
+  padding: 1.25rem;
+  background: #fff;
+  margin-top: 1.5rem;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+}
+
+.cw-product-queue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.cw-product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cw-product-card {
+  border: 1px solid #e2e8f0;
+  border-radius: var(--ui-radius);
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+}
+
+.cw-product-title {
+  margin: 0;
+  font-weight: 600;
+}
+
+.cw-product-meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #475569;
+  display: flex;
+  gap: 1rem;
+}
+
+.cw-expand {
+  border: 1px solid #dbeafe;
+  background: #eff6ff;
+  border-radius: var(--ui-radius);
+  padding: 0.35rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cw-chip {
+  border-radius: 999px;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #0f172a;
+  background: rgba(15, 23, 42, 0.05);
+}
+
+.cw-chip-pricing { background: rgba(59, 130, 246, 0.2); color: #1d4ed8; }
+.cw-chip-hold { background: rgba(251, 191, 36, 0.2); color: #b45309; }
+.cw-chip-25 { background: rgba(16, 185, 129, 0.2); color: #047857; }
+.cw-chip-50 { background: rgba(14, 165, 233, 0.2); color: #0369a1; }
+.cw-chip-75 { background: rgba(249, 115, 22, 0.2); color: #c2410c; }
+.cw-chip-reset { background: rgba(244, 63, 94, 0.2); color: #be123c; }
+
 .vd-shell {
   margin-top: 2rem;
   margin-bottom: 2rem;
@@ -187,7 +258,7 @@
 .vd-refresh {
   border: 1px solid #dbeafe;
   background: #eff6ff;
-  border-radius: 12px;
+  border-radius: var(--ui-radius);
   padding: 0.5rem 1.25rem;
   font-weight: 600;
   cursor: pointer;
@@ -202,7 +273,7 @@
 
 .vd-card {
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: var(--ui-radius);
   padding: 1.25rem;
   background: #fff;
   box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
@@ -271,7 +342,7 @@
   justify-content: space-between;
   gap: 1.5rem;
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: var(--ui-radius);
   padding: 1.5rem;
   background: #fff;
   box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
@@ -338,7 +409,7 @@
 
 .vd-hourly {
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: var(--ui-radius);
   padding: 1.5rem;
   background: #fff;
   box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
@@ -363,7 +434,7 @@
 
 .vd-state {
   padding: 0.75rem 1rem;
-  border-radius: 12px;
+  border-radius: var(--ui-radius);
   background: #eff6ff;
   color: #1e3a8a;
   margin-bottom: 1rem;

@@ -34,6 +34,16 @@
 
 <!-- STYLES for BUTTONS - NEED TO MIGRATE THEM SOON -->
 <style>
+		:root {
+			--ui-radius: 10px;
+		}
+
+		.card,
+		.btn,
+		.form-control,
+		.dropdown-menu {
+			border-radius: var(--ui-radius) !important;
+		}
 
 		.content{margin-top:0rem;}
 
@@ -79,6 +89,29 @@
 		.Y-color {background: #ede505;}
 		.G-color {background: #9ee899;}
 		.O-color {background: #f79845;}
+		.scrollable-links {
+			position: static !important;
+			display: block !important;
+			max-height: 12rem;
+			overflow-y: scroll;
+			overflow-x: hidden;
+			padding-right: 0.25rem;
+			scrollbar-width: thin;
+			scrollbar-color: #3b7ddd #f4f7fc;
+		}
+		.scrollable-links::-webkit-scrollbar {
+			width: 6px;
+		}
+		.scrollable-links::-webkit-scrollbar-thumb {
+			background-color: #3b7ddd;
+			border-radius: 4px;
+		}
+		.scrollable-links::-webkit-scrollbar-track {
+			background: #f4f7fc;
+		}
+		.scrollable-links .dropdown-item {
+			white-space: normal;
+		}
 
 </style>
 
@@ -135,6 +168,7 @@
 							<li class="sidebar-item"><a class="sidebar-link" href="{% url 'visitors:VISITORS' 'TRC-DONATIONS' %}"><i class="align-middle mr-2 fas fa-fw fa-user-plus"></i>Donations Tracker</a></li>
 							<li class="sidebar-item"><a class="sidebar-link" href="{% url 'pricing:portal' 'RMC' %}"><i class="align-middle mr-2 fas fa-fw fa-qrcode"></i>RMC PRICING PORTAL</a></li>
 							<li class="sidebar-item"><a class="sidebar-link" href="{% url 'pricing:stats' 'RMC' %}"><i class="align-middle mr-2 fas fa-fw fa-chart-bar"></i>Pricing Stats</a></li>
+							<li class="sidebar-item"><a class="sidebar-link" href="{% url 'pricing:update_pos' %}"><i class="align-middle mr-2 fas fa-fw fa-tags"></i>Pricing Discount Update</a></li>
 							<li class="sidebar-item"><a class="sidebar-link" href="{% url 'visitors:VISITORS' 'TRC' %}"><i class="align-middle mr-2 fas fa-fw fa-user-plus"></i>Visitors MEGA-T</a></li>
 							<li class="sidebar-item"><a class="sidebar-link" href="{% url 'visitors:VISITORS' 'RCH' %}"><i class="align-middle mr-2 fas fa-fw fa-user-plus"></i>Visitors MEGA-R</a></li>
 						</ul>
@@ -220,10 +254,16 @@
 									<h5 class="card-title">Quick Links</h5>
 								</div>
 								<div class="card-body">
-									<div class="dropdown-menu mb-2" style="position:static;display:block;">
-										{% for link in L_Q %}
-										<a class="dropdown-item" href="{{link.url}}" target="_blank"><i class="align-middle mr-2 fa-fw {{link.link_style}}"></i>{{link.text}}</a>
-										{% endfor %}
+									<div class="dropdown-menu mb-2 scrollable-links">
+										{% if L_Q %}
+											{% for link in L_Q %}
+											<a class="dropdown-item" href="{{link.url}}" target="_blank"><i class="align-middle mr-2 fa-fw {{link.link_style}}"></i>{{link.text}}</a>
+											{% endfor %}
+										{% else %}
+											{% for link in Sample_Q %}
+											<a class="dropdown-item" href="{{link.url}}"><i class="align-middle mr-2 fa-fw {{link.link_style}}"></i>{{link.text}}</a>
+											{% endfor %}
+										{% endif %}
 									</div>
 
 
@@ -236,10 +276,16 @@
 								</div>
 								<div class="card-body">
 
-									<div class="dropdown-menu mb-2" style="position:static;display:block;">
-										{% for link in L_C %}
-										<a class="dropdown-item" href="{{link.url}}" target="_blank"><i class="align-middle mr-2 fa-fw {{link.link_style}}"></i>{{link.text}}</a>
-										{% endfor %}
+									<div class="dropdown-menu mb-2 scrollable-links">
+										{% if L_C %}
+											{% for link in L_C %}
+											<a class="dropdown-item" href="{{link.url}}" target="_blank"><i class="align-middle mr-2 fa-fw {{link.link_style}}"></i>{{link.text}}</a>
+											{% endfor %}
+										{% else %}
+											{% for link in Sample_C %}
+											<a class="dropdown-item" href="{{link.url}}"><i class="align-middle mr-2 fa-fw {{link.link_style}}"></i>{{link.text}}</a>
+											{% endfor %}
+										{% endif %}
 									</div>
 
 								</div>
@@ -263,10 +309,16 @@
 								</div>
 								<div class="card-body">
 
-									<div class="dropdown-menu mb-2" style="position:static;display:block;">
-										{% for link in L_A %}
-										<a class="dropdown-item" href="{{link.url}}" target="_blank"><i class="align-middle mr-2 fa-fw {{link.link_style}}"></i>{{link.text}}</a>
-										{% endfor %}
+									<div class="dropdown-menu mb-2 scrollable-links">
+										{% if L_A %}
+											{% for link in L_A %}
+											<a class="dropdown-item" href="{{link.url}}" target="_blank"><i class="align-middle mr-2 fa-fw {{link.link_style}}"></i>{{link.text}}</a>
+											{% endfor %}
+										{% else %}
+											{% for link in Sample_A %}
+											<a class="dropdown-item" href="{{link.url}}"><i class="align-middle mr-2 fa-fw {{link.link_style}}"></i>{{link.text}}</a>
+											{% endfor %}
+										{% endif %}
 									</div>
 
 								</div>
@@ -277,10 +329,16 @@
 									<h5 class="card-title">External Resources</h5>
 								</div>
 								<div class="card-body">
-									<div class="dropdown-menu mb-2" style="position:static;display:block;">
-										{% for link in L_E %}
-										<a class="dropdown-item" href="{{link.url}}" target="_blank"><i class="align-middle mr-2 fa-fw {{link.link_style}}"></i>{{link.text}}</a>
-										{% endfor %}
+									<div class="dropdown-menu mb-2 scrollable-links">
+										{% if L_E %}
+											{% for link in L_E %}
+											<a class="dropdown-item" href="{{link.url}}" target="_blank"><i class="align-middle mr-2 fa-fw {{link.link_style}}"></i>{{link.text}}</a>
+											{% endfor %}
+										{% else %}
+											{% for link in Sample_E %}
+											<a class="dropdown-item" href="{{link.url}}"><i class="align-middle mr-2 fa-fw {{link.link_style}}"></i>{{link.text}}</a>
+											{% endfor %}
+										{% endif %}
 									</div>
 
 								</div>

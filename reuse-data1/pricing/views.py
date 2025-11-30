@@ -439,6 +439,27 @@ def stats(request, location=''):
     except:
         avg_item_price = ''
 
+    PT = list(PT)
+    if not PT:
+        PT = [
+            {'CAT': 'Housewares', 'PT': 'HOUSEWARES', 'PRICING_VALUE': 1250.50, 'TOTAL_ITEMS': 300, 'COUNT': 45, 'AVG': 12.50, 'ITEM_SUBMISSIONS': 6.6},
+            {'CAT': 'Furniture', 'PT': 'FURNITURE', 'PRICING_VALUE': 980.00, 'TOTAL_ITEMS': 40, 'COUNT': 12, 'AVG': 24.50, 'ITEM_SUBMISSIONS': 3.3},
+        ]
+
+    ST = list(ST)
+    if not ST:
+        ST = [
+            {'ST': 'alice', 'PRICING_VALUE': 720.25, 'TOTAL_ITEMS': 110, 'COUNT': 15, 'AVG': 10.00, 'ITEM_SUBMISSIONS': 7.3},
+            {'ST': 'bob', 'PRICING_VALUE': 540.40, 'TOTAL_ITEMS': 90, 'COUNT': 10, 'AVG': 11.25, 'ITEM_SUBMISSIONS': 9.0},
+        ]
+
+    if not DT_table:
+        cats = ['Books', 'Furniture', 'Electronics']
+        DT_table = [
+            {'date': '2024-06-01', 'Books': 25, 'Furniture': 10, 'Electronics': 5},
+            {'date': '2024-06-02', 'Books': 18, 'Furniture': 7, 'Electronics': 9},
+        ]
+
     context = {
         'location': location,
         'start_date': start_date.strftime('%Y-%m-%d'),
@@ -478,6 +499,49 @@ def template_home(request):
             'L_C' : L.filter(category='C').order_by('order'),
             'L_E' : L.filter(category='E').order_by('order'),
         }
+
+    sample_links = {
+        'Q': [
+            {'text': 'Sample: Pricing Portal', 'url': '#', 'link_style': 'fas fa-link'},
+            {'text': 'Sample: Visitors Tracker', 'url': '#', 'link_style': 'fas fa-user'},
+            {'text': 'Sample: POS Update', 'url': '#', 'link_style': 'fas fa-barcode'},
+            {'text': 'Sample: Reports Dashboard', 'url': '#', 'link_style': 'fas fa-chart-line'},
+            {'text': 'Sample: Donations Intake', 'url': '#', 'link_style': 'fas fa-dolly'},
+            {'text': 'Sample: Retail Calendar', 'url': '#', 'link_style': 'fas fa-calendar'},
+            {'text': 'Sample: Discount Schedule', 'url': '#', 'link_style': 'fas fa-tags'},
+            {'text': 'Sample: Help Desk', 'url': '#', 'link_style': 'fas fa-life-ring'},
+            {'text': 'Sample: Staffing Plan', 'url': '#', 'link_style': 'fas fa-user-friends'},
+            {'text': 'Sample: Maintenance Log', 'url': '#', 'link_style': 'fas fa-tools'},
+        ],
+        'C': [
+            {'text': 'Sample: Slack Announcements', 'url': '#', 'link_style': 'fab fa-slack'},
+            {'text': 'Sample: Staff Email', 'url': '#', 'link_style': 'fas fa-envelope'},
+            {'text': 'Sample: Community Updates', 'url': '#', 'link_style': 'fas fa-bullhorn'},
+            {'text': 'Sample: Incident Report Form', 'url': '#', 'link_style': 'fas fa-file-alt'},
+            {'text': 'Sample: Safety Alerts', 'url': '#', 'link_style': 'fas fa-exclamation-triangle'},
+        ],
+        'A': [
+            {'text': 'Sample: Receiving Guide', 'url': '#', 'link_style': 'fas fa-book'},
+            {'text': 'Sample: Pricing Guide', 'url': '#', 'link_style': 'fas fa-clipboard-list'},
+            {'text': 'Sample: Electronics Testing', 'url': '#', 'link_style': 'fas fa-plug'},
+            {'text': 'Sample: Donation Intake SOP', 'url': '#', 'link_style': 'fas fa-hands-helping'},
+            {'text': 'Sample: Furniture Prep Guide', 'url': '#', 'link_style': 'fas fa-couch'},
+        ],
+        'E': [
+            {'text': 'Sample: Shopify Admin', 'url': '#', 'link_style': 'fas fa-store'},
+            {'text': 'Sample: QuickBooks', 'url': '#', 'link_style': 'fas fa-coins'},
+            {'text': 'Sample: Google Drive', 'url': '#', 'link_style': 'fab fa-google-drive'},
+            {'text': 'Sample: Volunteer Portal', 'url': '#', 'link_style': 'fas fa-users'},
+            {'text': 'Sample: Facilities Request', 'url': '#', 'link_style': 'fas fa-warehouse'},
+        ],
+    }
+
+    return_dict.update({
+        'Sample_Q': sample_links['Q'],
+        'Sample_C': sample_links['C'],
+        'Sample_A': sample_links['A'],
+        'Sample_E': sample_links['E'],
+    })
 
     return render(request, 'pricing/spark_base.html', return_dict)
 

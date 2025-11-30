@@ -12,6 +12,99 @@
 {% endblock %}
 
 {% block content %}
+<style>
+.table-preview {
+  max-height: 280px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.table-preview table {
+  margin-bottom: 0;
+}
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.stat-card {
+  padding: 1.25rem;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.07);
+}
+.stat-label {
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  color: #64748b;
+  margin-bottom: 0.5rem;
+}
+.stat-value {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+}
+.stat-caption {
+  margin: 0;
+  color: #475569;
+  font-size: 0.9rem;
+}
+.category-reference-wrap {
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(130px, 1fr));
+  gap: 0.75rem;
+  min-width: 910px;
+}
+.category-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0.65rem 0.45rem;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+.category-card:hover {
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+.category-card h6 {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 0.82rem;
+  margin-bottom: 0.4rem;
+  color: inherit;
+}
+.category-card h6 i {
+  margin-right: 0.35rem;
+}
+.category-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.category-badge {
+  border-radius: 12px;
+  padding: 0.2rem 0.3rem;
+  font-size: 0.74rem;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  white-space: nowrap;
+}
+.category-card.books { background: #fff4e6; color: #b45309; }
+.category-card.building { background: #f5f0e8; color: #8c5a2b; }
+.category-card.electronics { background: #e6f3ff; color: #0369a1; }
+.category-card.computers { background: #f0edff; color: #5b21b6; }
+.category-card.furniture { background: #e6f9f5; color: #0f766e; }
+.category-card.housewares { background: #ffe9ec; color: #b91c1c; }
+.category-card.textiles { background: #f5ebff; color: #7e22ce; }
+</style>
 <!-- QueryBox -->
 <div class="row">
   <div class="col-12">
@@ -46,147 +139,117 @@
 
 
 <!-- stats toolbar -->
-<div class="row">
-  <div class="col-md-4 col-lg-2 col-sm-12">
-    <div class="card">
-			<div class="card-body">
-				<div class="row">
-					<div class="col mt-0">
-						<h5 class="card-title">Total Pricing ($)</h5>
-					</div>
-
-					<div class="col-auto">
-						<div class="avatar">
-							<div class="avatar-title rounded-circle bg-primary-dark">
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck align-middle"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-							</div>
-						</div>
-					</div>
-				</div>
-				<h1 class="display-5 mt-1 mb-3">${{total_pricing_value | floatformat:2}}</h1>
-				<div class="mb-0"><span class="text-danger"><i class="mdi mdi-arrow-bottom-right"></i></span>Total value of priced goods</div>
-			</div>
-		</div>
+<div class="stat-grid">
+  <div class="stat-card">
+    <p class="stat-label">Total Pricing Value</p>
+    <p class="stat-value">${{total_pricing_value | floatformat:2}}</p>
+    <p class="stat-caption">Total value of priced goods</p>
   </div>
-  <div class="col-md-4 col-lg-2 col-sm-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="row">
-          <div class="col mt-0">
-            <h5 class="card-title">Total Items</h5>
-          </div>
-
-          <div class="col-auto">
-            <div class="avatar">
-              <div class="avatar-title rounded-circle bg-primary-dark">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck align-middle"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-              </div>
-            </div>
-          </div>
-        </div>
-        <h1 class="display-5 mt-1 mb-3">{{total_items}}</h1>
-        <div class="mb-0">Total # of items priced</div>
-      </div>
-    </div>
+  <div class="stat-card">
+    <p class="stat-label">Total Items</p>
+    <p class="stat-value">{{total_items}}</p>
+    <p class="stat-caption">Total number of items priced</p>
   </div>
-  <div class="col-md-4 col-lg-2 col-sm-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="row">
-          <div class="col mt-0">
-            <h5 class="card-title">Total Submissions</h5>
-          </div>
-
-          <div class="col-auto">
-            <div class="avatar">
-              <div class="avatar-title rounded-circle bg-primary-dark">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck align-middle"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-              </div>
-            </div>
-          </div>
-        </div>
-        <h1 class="display-5 mt-1 mb-3">{{pricing_submissions}}</h1>
-        <div class="mb-0">Total Pricing submissions</div>
-      </div>
-    </div>
+  <div class="stat-card">
+    <p class="stat-label">Total Submissions</p>
+    <p class="stat-value">{{pricing_submissions}}</p>
+    <p class="stat-caption">Number of pricing submissions</p>
   </div>
-  <div class="col-md-4 col-lg-2 col-sm-12">
-    <div class="card">
-			<div class="card-body">
-				<div class="row">
-					<div class="col mt-0">
-						<h5 class="card-title">Avg Item Price</h5>
-					</div>
-
-					<div class="col-auto">
-						<div class="avatar">
-							<div class="avatar-title rounded-circle bg-primary-dark">
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck align-middle"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-							</div>
-						</div>
-					</div>
-				</div>
-				<h1 class="display-5 mt-1 mb-3">${{avg_item_price | floatformat:2}}</h1>
-				<div class="mb-0">Average price of items</div>
-			</div>
-		</div>
+  <div class="stat-card">
+    <p class="stat-label">Avg Item Price</p>
+    <p class="stat-value">${{avg_item_price | floatformat:2}}</p>
+    <p class="stat-caption">Average price per item</p>
   </div>
-  <div class="col-md-4 col-lg-2 col-sm-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="row">
-          <div class="col mt-0">
-            <h5 class="card-title">Items/Submission</h5>
-          </div>
-
-          <div class="col-auto">
-            <div class="avatar">
-              <div class="avatar-title rounded-circle bg-primary-dark">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck align-middle"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-              </div>
-            </div>
-          </div>
-        </div>
-        <h1 class="display-5 mt-1 mb-3">{{items_per_submission | floatformat:2}}</h1>
-        <div class="mb-0">Avg Items per submission</div>
-      </div>
-    </div>
+  <div class="stat-card">
+    <p class="stat-label">Items per Submission</p>
+    <p class="stat-value">{{items_per_submission | floatformat:2}}</p>
+    <p class="stat-caption">Average items per submission</p>
   </div>
-  <div class="col-md-4 col-lg-2 col-sm-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="row">
-          <div class="col mt-0">
-            <h5 class="card-title">TBD</h5>
-          </div>
-
-          <div class="col-auto">
-            <div class="avatar">
-              <div class="avatar-title rounded-circle bg-primary-dark">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck align-middle"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-              </div>
-            </div>
-          </div>
-        </div>
-        <h1 class="display-5 mt-1 mb-3">TBD</h1>
-        <div class="mb-0">TBD Stat</div>
-      </div>
-    </div>
-  </div>
-
 </div>
 
 
 
-<div class="row">
-  <div class="col-sm-12 col-md-8">
+<div class="card mb-4">
+  <div class="card-header">
+    <h5 class="card-title mb-0">Category Reference</h5>
+  </div>
+  <div class="card-body category-reference-wrap">
+    <div class="category-grid">
+      <div class="category-card books">
+        <h6><i class="fas fa-book"></i>Books & Media</h6>
+        <div class="category-items">
+          <span class="category-badge">Books</span>
+          <span class="category-badge">Movies</span>
+          <span class="category-badge">Music</span>
+        </div>
+      </div>
+      <div class="category-card building">
+        <h6><i class="fas fa-hammer"></i>Building Materials & Tools</h6>
+        <div class="category-items">
+          <span class="category-badge">Building Materials</span>
+          <span class="category-badge">Doors/Windows</span>
+          <span class="category-badge">Lighting</span>
+          <span class="category-badge">Lumber</span>
+          <span class="category-badge">Tools</span>
+        </div>
+      </div>
+      <div class="category-card electronics">
+        <h6><i class="fas fa-plug"></i>Electronics</h6>
+        <div class="category-items">
+          <span class="category-badge">Electronics</span>
+        </div>
+      </div>
+      <div class="category-card computers">
+        <h6><i class="fas fa-desktop"></i>Computers & Peripherals</h6>
+        <div class="category-items">
+          <span class="category-badge">Desktop</span>
+          <span class="category-badge">Laptop</span>
+          <span class="category-badge">Peripherals</span>
+          <span class="category-badge">Tablet</span>
+          <span class="category-badge">Smartphone</span>
+          <span class="category-badge">Other Computer</span>
+        </div>
+      </div>
+      <div class="category-card furniture">
+        <h6><i class="fas fa-couch"></i>Furniture & Appliances</h6>
+        <div class="category-items">
+          <span class="category-badge">Appliances</span>
+          <span class="category-badge">Furniture</span>
+        </div>
+      </div>
+      <div class="category-card housewares">
+        <h6><i class="fas fa-utensils"></i>Housewares</h6>
+        <div class="category-items">
+          <span class="category-badge">Housewares</span>
+          <span class="category-badge">Holiday</span>
+          <span class="category-badge">Jewelry</span>
+          <span class="category-badge">Seasonal</span>
+          <span class="category-badge">Bicycle</span>
+          <span class="category-badge">Bicycle Parts</span>
+        </div>
+      </div>
+      <div class="category-card textiles">
+        <h6><i class="fas fa-tshirt"></i>Textiles</h6>
+        <div class="category-items">
+          <span class="category-badge">Accessories</span>
+          <span class="category-badge">Clothing</span>
+          <span class="category-badge">Linens</span>
+          <span class="category-badge">Shoes</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-12">
     <div class="card">
-    	<div class="card-header">
-    		<!-- <h5 class="card-title">TESTER</h5> -->
-    	</div>
-    	<div class="card-body">
-        <h2 class="pb-4">Breakdown by Cateogry / Product Type</h2>
-        <table id="mainTable1" class="table table-sm">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">Breakdown by Category / Product Type</h5>
+        <button type="button" class="btn btn-sm btn-outline-primary">Expand</button>
+      </div>
+      <div class="card-body table-responsive table-preview">
+        <table class="table table-sm align-middle">
           <thead><tr>
             <th>Category</th>
             <th>PRODUCT TYPE</th>
@@ -209,48 +272,20 @@
               </tr>
             {% endfor %}
           </tbody></table>
-
-    	</div>
-    </div>
-  </div>
-
-
-  <div class="col-sm-12 col-md-4">
-    <div class="card">
-      <div class="card-header"><!-- <h5 class="card-title">TESTER</h5> --></div>
-        <div class="card-body">
-        <h2 class="pb-4">Category Reference</h2>
-        <table id="CategoryReference" class="table table-sm">
-          <thead>
-            <tr><th>Category</th><th>Product Type</th></tr>
-          </thead>
-          <tbody>
-            <tr><td rowspan="3">Books & Media</td><td>BOOKS</td></tr><tr><td>MOVIES</td></tr><tr><td>MUSIC</td></tr>
-            <tr><td rowspan="5">Building Materials & Tools</td><td>BUILDING MATERIALS</td></tr><tr><td>DOORS/WINDOWS</td></tr><tr><td>LIGHTING</td></tr><tr><td>LUMBER</td></tr><tr><td>TOOLS</td></tr>
-            <tr><td rowspan="1">Electronics</td><td>ELECTRONICS</td></tr>
-            <tr><td rowspan="6">Computers & Peripherals</td><td>DESKTOP</td></tr><tr><td>LAPTOP</td></tr><tr><td>PERIPHERALS</td></tr><tr><td>TABLET</td></tr><tr><td>SMARTPHONE</td></tr><tr><td>OTHER COMPUTER</td></tr>
-            <tr><td rowspan="2">Furniture & Appliances</td><td>APPLIANCES</td></tr><tr><td>FURNITURE</td></tr>
-            <tr><td rowspan="6">Housewares</td><td>HOUSEWARES</td></tr><tr><td>HOLIDAY</td></tr><tr><td>JEWELRY</td></tr><tr><td>SEASONAL</td></tr><tr><td>BICYCLE</td></tr><tr><td>BICYCLE PARTS</td></tr>
-            <tr><td rowspan="4">Textiles</td><td>ACCESSORIES</td></tr><tr><td>CLOTHING</td></tr><tr><td>LINENS</td></tr><tr><td>SHOES</td></tr>
-          </tbody>
-        </table>
       </div>
     </div>
   </div>
-
-
-
 </div>
 <!-- STAFF BREADKLDOWN -->
-<div class="row">
-  <div class="col-sm-12 col-md-9">
+<div class="row g-3 mt-1">
+  <div class="col-12">
     <div class="card">
-    	<div class="card-header">
-    		<!-- <h5 class="card-title">TESTER</h5> -->
+    	<div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">Breakdown by Staff ID</h5>
+        <button type="button" class="btn btn-sm btn-outline-primary">Expand</button>
     	</div>
-    	<div class="card-body">
-        <h2 class="pb-4">Breakdown by STAFF ID</h2>
-        <table id="mainTable2" class="table table-sm">
+    	<div class="card-body table-responsive table-preview">
+        <table class="table table-sm align-middle">
           <thead><tr>
             <th>Staff ID</th>
             <th>Value</th>
@@ -278,15 +313,15 @@
 </div>
 
 <!-- BY DATE -->
-<div class="row">
-  <div class="col">
+<div class="row g-3 mt-1">
+  <div class="col-12">
     <div class="card">
-    	<div class="card-header">
-    		<!-- <h5 class="card-title">TESTER</h5> -->
+    	<div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">Datewise Breakdown by Product Type</h5>
+        <button type="button" class="btn btn-sm btn-outline-primary">Expand</button>
     	</div>
-    	<div class="card-body">
-        <h2 class="pb-4">Datewise Breadkwon by PRODUCT_TYPE (TESTING / WORK IN PROGRESS)</h2>
-        <table id="dateTable" class="table table-sm">
+    	<div class="card-body table-responsive table-preview">
+        <table class="table table-sm align-middle">
           <thead><tr>
             {% for i in cats%}
             <th>{{i}}</th>
@@ -311,16 +346,4 @@
 
 
 
-{% block javascript_end %}
-
-<script type="text/javascript">
-
-  $('#mainTable1').DataTable({dom:'Bfrtip','pageLength': 50, buttons:['copy','csv','print']})
-  $('#mainTable2').DataTable({dom:'Bfrtip','pageLength': 50, buttons:['copy','csv','print']})
-  $('#dateTable').DataTable({dom:'Bfrtip','pageLength': 50, buttons:['copy','csv','print']})
-
-</script>
-
-
-
-{% endblock %}
+{% block javascript_end %}{% endblock %}
