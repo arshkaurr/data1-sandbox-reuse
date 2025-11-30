@@ -14,14 +14,18 @@ import pytz
 import json
 from datetime import datetime
 import pandas as pd
+from collections import defaultdict
 
 from visitors.models import Visitors
 from django.utils import timezone
 
 
-# from bokeh.plotting import figure
-# from bokeh.embed import components
-# from bokeh.models import HoverTool, ColumnDataSource, ranges, LabelSet
+def wants_json_response(request):
+    fmt = request.GET.get('format', '')
+    if fmt.lower() == 'json':
+        return True
+    accept_header = request.headers.get('Accept', '')
+    return 'application/json' in accept_header.lower()
 
 
 
@@ -79,30 +83,47 @@ def VISITORS(request, location=''):
         )
 
     ################# Section to Make the Hours Box at the bottom
-    hours_dict = {}
-    for i in Visitors_here_today:  #######ALSO TESTS FOR POSITIVE COUNTS!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        the_hour_str = useastern(i.timestamp).strftime("%I %p --")
-        if i.count > 0:  ########### IMPORTANT : FILTER OUT ZEROS!
-            if the_hour_str in hours_dict:
-                hours_dict[the_hour_str] += i.count
-            else:
-                hours_dict[the_hour_str] = i.count
+    hours_totals = defaultdict(int)
+    hours_labels = {}
+    for record in Visitors_here_today:
+        if record.count > 0:
+            hour_dt = useastern(record.timestamp).replace(minute=0, second=0, microsecond=0)
+            hours_totals[hour_dt] += record.count
+            hours_labels[hour_dt] = hour_dt.strftime("%I %p --")
 
-    # THIS OUTPUT THE HTML TABLE!
-    info = pd.DataFrame([{'Hour of Day (Today)': i, 'Total Visitors that Entered': hours_dict[i]}  for i in hours_dict ])
-    info = info.to_html(index=False,classes="text-center table table-sm")
-    info = info.replace("right;", "center;")
+    hourly_rows = [
+        {'label': hours_labels[key], 'count': hours_totals[key]}
+        for key in sorted(hours_totals.keys())
+    ]
+
+    if hourly_rows:
+        info_df = pd.DataFrame([
+            {'Hour of Day (Today)': row['label'], 'Total Visitors that Entered': row['count']}
+            for row in hourly_rows
+        ])
+        info = info_df.to_html(index=False, classes="text-center table table-sm").replace("right;", "center;")
+    else:
+        info = '<p class="text-center text-muted">No visitor entries recorded today.</p>'
     ################# INFOSECTION GET HOURLY DATA
 
     render_dict = {
         'capacity': {'IRC':140,'TRC':183,'RCH':175,'DDO':999,'TEST':999,'700-CABOOSE': 35,'TRC-DONATIONS':999 ,'700-WAREHOUSE': 38}[location],
         'location' : location,
 
-        'current' : Visitors_here_today.aggregate(Sum('count'))['count__sum'],
-        'total_today' : Visitors_here_today.filter(count__gte=0).aggregate(Sum('count'))['count__sum'],
+        'current' : Visitors_here_today.aggregate(Sum('count'))['count__sum'] or 0,
+        'total_today' : Visitors_here_today.filter(count__gte=0).aggregate(Sum('count'))['count__sum'] or 0,
         'info': info,
+        'hourly_rows': hourly_rows,
     }
 
+    if wants_json_response(request):
+        return JsonResponse({
+            'location': location,
+            'capacity': capacity,
+            'current': render_dict['current'],
+            'total_today': render_dict['total_today'],
+            'hourly': hourly_rows,
+        })
 
     return render(request, 'visitors/index.html',render_dict)
 
